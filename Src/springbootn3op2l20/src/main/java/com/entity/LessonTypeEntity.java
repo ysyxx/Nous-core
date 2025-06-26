@@ -23,76 +23,46 @@ import com.baomidou.mybatisplus.enums.IdType;
 
 
 /**
- * 用户
+ * 课程类型
  * 数据库通用操作实体类（普通增删改查）
  * @author
  * @email
  * @date 2024-03-05 18:16:19
  */
 @Data
-@TableName("yonghu")
-public class YonghuEntity<T> implements Serializable {
-	private static final long serialVersionUID = 1L;
+@TableName("lessontype")
+public class LessonTypeEntity<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 
-	public YonghuEntity() {
+    public LessonTypeEntity() {
 
-	}
+    }
 
-	public YonghuEntity(T t) {
-		try {
-			BeanUtils.copyProperties(this, t);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public LessonTypeEntity(T t) {
+        try {
+            BeanUtils.copyProperties(this, t);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * 主键id
-	 */
-    @TableId
+    /**
+     * 主键id
+     */
+    @TableId(type = IdType.AUTO)
     private Long id;
-	/**
-	 * 用户账号
-	 */
+    /**
+     * 课程类型
+     */
 
-	private String yonghuzhanghao;
-
-	/**
-	 * 密码
-	 */
-
-	private String mima;
-
-	/**
-	 * 用户姓名
-	 */
-
-	private String yonghuxingming;
-
-	/**
-	 * 性别
-	 */
-
-	private String xingbie;
-
-	/**
-	 * 电话
-	 */
-
-	private String dianhua;
-
-	/**
-	 * 头像
-	 */
-
-	private String touxiang;
+    private String lessonType;
 
 
-	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat
-	private Date addtime;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat
+    private Date addtime;
 
 
 }

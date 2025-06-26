@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item :style='{"margin":"0 10px"}'>
 	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程类型：</div>
-        <el-input v-model="formSearch.kechengleixing" placeholder="课程类型" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
+        <el-input v-model="formSearch.lessonType" placeholder="课程类型" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
       </el-form-item>
 	  <el-button v-if=" true " :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#F5BB00","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="getList(1, curFenlei)"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-search"></i>查询</el-button>
 	  <el-button v-if="btnAuth('xuexijindu','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#333","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="add('/index/xuexijinduAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>
@@ -46,7 +46,7 @@
 		    <div :style='{"padding":"0 10px","overflow":"hidden","flex":"1","display":"flex","height":"auto"}' class="item-info">
 		      <div :style='{"width":"50%","padding":"0","alignItems":"center","flexWrap":"wrap","flex":"1","display":"flex"}'>
 				<div class="title">{{item.kechengmingcheng}}</div>
-				<div class="title">{{item.kechengleixing}}</div>
+				<div class="title">{{item.lessonType}}</div>
 				<div v-if="item.price" class="price"><span :style='{"fontSize":"12px"}'>￥</span>{{item.price}}</div>
 		        <div :style='{"width":"100%","padding":"2px 10px","borderColor":"#f0f0f0","borderStyle":"dashed","borderWidth":"0 0 1px 0","display":"none"}' class="time">
 		          <span class="icon iconfont icon-shijian21"></span>
@@ -103,7 +103,7 @@
         ],
         formSearch: {
           kechengmingcheng: '',
-          kechengleixing: '',
+          lessonType: '',
           xuexijindu: '',
         },
         fenlei: [],
@@ -159,7 +159,7 @@
         let params = {page, limit: this.pageSize};
         let searchWhere = {};
         if (this.formSearch.kechengmingcheng != '') searchWhere.kechengmingcheng = '%' + this.formSearch.kechengmingcheng + '%';
-        if (this.formSearch.kechengleixing != '') searchWhere.kechengleixing = '%' + this.formSearch.kechengleixing + '%';
+        if (this.formSearch.lessonType != '') searchWhere.lessonType = '%' + this.formSearch.lessonType + '%';
         if (this.formSearch.xuexijindu != '') searchWhere.xuexijindu = this.formSearch.xuexijindu;
 			let user = JSON.parse(localStorage.getItem('sessionForm'))
 		if (this.sortType) searchWhere.sort = this.sortType

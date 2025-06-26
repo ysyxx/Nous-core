@@ -15,15 +15,11 @@
 	
     <el-form :inline="true" :model="formSearch" class="list-form-pv" :style='{"padding":"0px 7% 20px","margin":"20px 0 0","borderColor":"#ddd","alignItems":"center","flexWrap":"wrap","background":"none","borderWidth":"0 0 1px","display":"flex","width":"100%","borderStyle":"solid","height":"auto","order":"1"}'>
       <el-form-item :style='{"margin":"0 10px"}'>
-	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程名称：</div>
-        <el-input v-model="formSearch.kechengmingcheng" placeholder="课程名称" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
-      </el-form-item>
-      <el-form-item :style='{"margin":"0 10px"}'>
 	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程类型：</div>
         <el-input v-model="formSearch.lessonType" placeholder="课程类型" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
       </el-form-item>
 	  <el-button v-if=" true " :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#F5BB00","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="getList(1, curFenlei)"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-search"></i>查询</el-button>
-	  <el-button v-if="btnAuth('kechengpingjia','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#333","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="add('/index/kechengpingjiaAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>
+	  <el-button v-if="btnAuth('lessonType','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#333","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="add('/index/lessonTypeAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>
     </el-form>
 	<div class="select2" :style='{"width":"100%","padding":"0 7%","margin":"10px 0 0","background":"#fff","height":"auto","order":"2"}'>
 	  <div :style='{"padding":"0px","margin":"4px 0","borderColor":"#eee","background":"none","borderWidth":"0 0 1px","width":"100%","position":"relative","borderStyle":"dashed","height":"auto"}' class="list" v-for="(item,index) in selectOptionsList" :key="item">
@@ -40,24 +36,15 @@
 		<div class="list3 index-pv1" :style='{"padding":"0 0px","overflow":"hidden","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","clear":"both","justifyContent":"space-between","height":"auto"}'>
 		  <div v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box">
 		    <div :style='{"border":"1px solid #f6f6f6","width":"200px","padding":"0px","margin":"0 10px 0 0","overflow":"hidden","height":"200px"}' class="img-box">
-				<img @click.stop="imgPreView(item.kechengtupian)" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%"}' v-if="item.kechengtupian && item.kechengtupian.substr(0,4)=='http'" :src="item.kechengtupian.split(',')[0]" class="image" />
-				<img @click.stop="imgPreView(baseUrl + (item.kechengtupian?item.kechengtupian.split(',')[0]:''))" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%"}' v-else :src="baseUrl + (item.kechengtupian?item.kechengtupian.split(',')[0]:'')" class="image" />
 			</div>
 		    <div :style='{"padding":"0 10px","overflow":"hidden","flex":"1","display":"flex","height":"auto"}' class="item-info">
 		      <div :style='{"width":"50%","padding":"0","alignItems":"center","flexWrap":"wrap","flex":"1","display":"flex"}'>
-				<div class="title">{{item.kechengmingcheng}}</div>
-				<div class="title">{{item.lessonType}}</div>
 				<div v-if="item.price" class="price"><span :style='{"fontSize":"12px"}'>￥</span>{{item.price}}</div>
 		        <div :style='{"width":"100%","padding":"2px 10px","borderColor":"#f0f0f0","borderStyle":"dashed","borderWidth":"0 0 1px 0","display":"none"}' class="time">
 		          <span class="icon iconfont icon-shijian21"></span>
 		          <span class="text">{{item.addtime}}</span>
 		        </div>
-		        <div :style='{"padding":"2px 10px","borderColor":"#f0f0f0","borderStyle":"dashed","borderWidth":"0 0 1px 0"}' class="publisher">
-		          <span class="icon iconfont icon-geren16"></span>
-		          <span class="text">{{item.yonghuzhanghao}}</span>
-		        </div>
 		      </div>
-		      <div class="desc" v-html="item.pingjiajianyi"></div>
 		    </div>
 		  </div>
 		</div>
@@ -102,11 +89,10 @@
         baseUrl: '',
         breadcrumbItem: [
           {
-            name: '课程评价'
+            name: '课程类型'
           }
         ],
         formSearch: {
-          kechengmingcheng: '',
           lessonType: '',
         },
         fenlei: [],
@@ -158,15 +144,11 @@
       getList(page, fenlei, ref = '') {
         let params = {page, limit: this.pageSize};
         let searchWhere = {};
-        if (this.formSearch.kechengmingcheng != '') searchWhere.kechengmingcheng = '%' + this.formSearch.kechengmingcheng + '%';
         if (this.formSearch.lessonType != '') searchWhere.lessonType = '%' + this.formSearch.lessonType + '%';
-		if(!this.centerType){
-			params['sfsh'] = '是';
-		}
 			let user = JSON.parse(localStorage.getItem('sessionForm'))
 		if (this.sortType) searchWhere.sort = this.sortType
 		if (this.sortOrder) searchWhere.order = this.sortOrder
-        this.$http.get(`kechengpingjia/${this.centerType?'page':'list'}`, {params: Object.assign(params, searchWhere)}).then(res => {
+        this.$http.get(`lessonType/${this.centerType?'page':'list'}`, {params: Object.assign(params, searchWhere)}).then(res => {
           if (res.data.code == 0) {
             this.dataList = res.data.data.list;
             this.total = Number(res.data.data.total);
@@ -201,7 +183,7 @@
 		  if(this.centerType){
 			  params.centerType = 1
 		  }
-        this.$router.push({path: '/index/kechengpingjiaDetail', query: params});
+        this.$router.push({path: '/index/lessonTypeDetail', query: params});
       },
 	btnAuth(tableName,key){
 		if(this.centerType){

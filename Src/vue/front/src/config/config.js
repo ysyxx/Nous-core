@@ -4,7 +4,7 @@ export default {
     indexNav: [
         {
             name: '课程信息',
-            url: '/index/kechengxinxi'
+            url: '/index/course'
         },
         {
             name: '互动交流',

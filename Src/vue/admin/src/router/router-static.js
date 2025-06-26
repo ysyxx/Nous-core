@@ -16,10 +16,10 @@ import center from '@/views/center'
     import yonghu from '@/views/modules/yonghu/list'
     import messages from '@/views/modules/messages/list'
     import syslog from '@/views/modules/syslog/list'
-    import kechengxinxi from '@/views/modules/kechengxinxi/list'
+    import course from '@/views/modules/course/list'
     import xuexijindu from '@/views/modules/xuexijindu/list'
     import config from '@/views/modules/config/list'
-    import kechengleixing from '@/views/modules/kechengleixing/list'
+    import lessonType from '@/views/modules/lessonType/list'
 
 
 //2.配置路由   注意：名字
@@ -75,9 +75,9 @@ export const routes = [{
         component: syslog
       }
       ,{
-	path: '/kechengxinxi',
+	path: '/course',
         name: '课程信息',
-        component: kechengxinxi
+        component: course
       }
       ,{
 	path: '/xuexijindu',
@@ -90,9 +90,9 @@ export const routes = [{
         component: config
       }
       ,{
-	path: '/kechengleixing',
+	path: '/lessonType',
         name: '课程类型',
-        component: kechengleixing
+        component: lessonType
       }
     ]
   },

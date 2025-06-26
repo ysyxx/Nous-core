@@ -9,11 +9,11 @@
 			label-width="150px"
 		>
 			<template >
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="课程类型" prop="kechengleixing">
-					<el-input v-model="ruleForm.kechengleixing" placeholder="课程类型" clearable  :readonly="ro.kechengleixing"></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="课程类型" prop="lessonType">
+					<el-input v-model="ruleForm.lessonType" placeholder="课程类型" clearable  :readonly="ro.lessonType"></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="kechengleixing">
-					<el-input v-model="ruleForm.kechengleixing" placeholder="课程类型" readonly></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="lessonType">
+					<el-input v-model="ruleForm.lessonType" placeholder="课程类型" readonly></el-input>
 				</el-form-item>
 			</template>
 			<el-form-item :style='{"padding":"0 10px","margin":"30px 0","alignItems":"center","textAlign":"center","display":"flex","width":"100%","perspective":"320px","-webkitPerspective":"320px","fontSize":"48px","justifyContent":"flex-end"}' class="btn">
@@ -110,18 +110,18 @@ export default {
 			
 			
 			ro:{
-				kechengleixing : false,
+				lessonType : false,
 			},
 			
 			
 			ruleForm: {
-				kechengleixing: '',
+				lessonType: '',
 			},
 		
 
 			
 			rules: {
-				kechengleixing: [
+				lessonType: [
 				],
 			}
 		};
@@ -156,9 +156,9 @@ export default {
 			}else if(this.type=='cross'){
 				var obj = this.$storage.getObj('crossObj');
 				for (var o in obj){
-						if(o=='kechengleixing'){
-							this.ruleForm.kechengleixing = obj[o];
-							this.ro.kechengleixing = true;
+						if(o=='lessonType'){
+							this.ruleForm.lessonType = obj[o];
+							this.ro.lessonType = true;
 							continue;
 						}
 				}
@@ -185,7 +185,7 @@ export default {
 
     info(id) {
       this.$http({
-        url: `kechengleixing/info/${id}`,
+        url: `lessonType/info/${id}`,
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
@@ -245,7 +245,7 @@ var objcross = this.$storage.getObj('crossObj');
 						crossrefid:this.ruleForm.crossrefid,
 					} 
 				this.$http({ 
-					url: "kechengleixing/page", 
+					url: "lessonType/page", 
 					method: "get", 
 					params: params 
 				}).then(({ 
@@ -257,7 +257,7 @@ var objcross = this.$storage.getObj('crossObj');
 							return false;
 						} else {
 							this.$http({
-								url: `kechengleixing/${!this.ruleForm.id ? "save" : "update"}`,
+								url: `lessonType/${!this.ruleForm.id ? "save" : "update"}`,
 								method: "post",
 								data: this.ruleForm
 							}).then(({ data }) => {
@@ -269,7 +269,7 @@ var objcross = this.$storage.getObj('crossObj');
 										onClose: () => {
 											this.parent.showFlag = true;
 											this.parent.addOrUpdateFlag = false;
-											this.parent.kechengleixingCrossAddOrUpdateFlag = false;
+											this.parent.lessonTypeCrossAddOrUpdateFlag = false;
 											this.parent.search();
 											this.parent.contentStyleChange();
 										}
@@ -285,7 +285,7 @@ var objcross = this.$storage.getObj('crossObj');
 			});
 		} else {
 			this.$http({
-				url: `kechengleixing/${!this.ruleForm.id ? "save" : "update"}`,
+				url: `lessonType/${!this.ruleForm.id ? "save" : "update"}`,
 				method: "post",
 			   data: this.ruleForm
 			}).then(({ data }) => {
@@ -297,7 +297,7 @@ var objcross = this.$storage.getObj('crossObj');
 						onClose: () => {
 							this.parent.showFlag = true;
 							this.parent.addOrUpdateFlag = false;
-							this.parent.kechengleixingCrossAddOrUpdateFlag = false;
+							this.parent.lessonTypeCrossAddOrUpdateFlag = false;
 							this.parent.search();
 							this.parent.contentStyleChange();
 						}
@@ -318,7 +318,7 @@ var objcross = this.$storage.getObj('crossObj');
     back() {
       this.parent.showFlag = true;
       this.parent.addOrUpdateFlag = false;
-      this.parent.kechengleixingCrossAddOrUpdateFlag = false;
+      this.parent.lessonTypeCrossAddOrUpdateFlag = false;
       this.parent.contentStyleChange();
     },
   }

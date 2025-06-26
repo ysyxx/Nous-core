@@ -1,42 +1,21 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : root
+ Source Server         : microService
  Source Server Type    : MySQL
- Source Server Version : 80037 (8.0.37)
- Source Host           : localhost:3306
+ Source Server Version : 80036 (8.0.36)
+ Source Host           : 47.121.191.169:3306
  Source Schema         : springbootn3op2l20
 
  Target Server Type    : MySQL
- Target Server Version : 80037 (8.0.37)
+ Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 26/06/2025 08:55:17
+ Date: 25/06/2025 15:02:56
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for chapters
--- ----------------------------
-DROP TABLE IF EXISTS `chapters`;
-CREATE TABLE `chapters`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `course_id` bigint NOT NULL COMMENT '所属课程ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '章节标题',
-  `chapter_order` int NOT NULL DEFAULT 0 COMMENT '章节显示顺序',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `course_id`(`course_id` ASC) USING BTREE,
-  CONSTRAINT `chapters_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '课程章节表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of chapters
--- ----------------------------
-INSERT INTO `chapters` VALUES (1, 1, '第一章：网络协议概论', 1, '2025-06-25 15:57:17');
-INSERT INTO `chapters` VALUES (2, 1, '第二章：物理层', 2, '2025-06-25 15:57:17');
 
 -- ----------------------------
 -- Table structure for config
@@ -58,39 +37,29 @@ INSERT INTO `config` VALUES (2, 'picture2', 'upload/picture2.jpg', NULL);
 INSERT INTO `config` VALUES (3, 'picture3', 'upload/picture3.jpg', NULL);
 
 -- ----------------------------
--- Table structure for courses
+-- Table structure for courseprogress
 -- ----------------------------
-DROP TABLE IF EXISTS `courses`;
-CREATE TABLE `courses`  (
+DROP TABLE IF EXISTS `courseprogress`;
+CREATE TABLE `courseprogress`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `title` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程名称',
-  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '课程详细介绍',
-  `kechengleixing` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程类型',
-  `kechengpingfen` int NULL DEFAULT NULL COMMENT '课程评分',
-  `cover_image_url` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '课程图片',
-  `thumbsupnum` int NULL DEFAULT 0 COMMENT '赞',
-  `crazilynum` int NULL DEFAULT 0 COMMENT '踩',
-  `clicktime` datetime NULL DEFAULT NULL COMMENT '最近点击时间',
-  `clicknum` int NULL DEFAULT 0 COMMENT '点击次数',
-  `storeupnum` int NULL DEFAULT 0 COMMENT '收藏数',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '课程信息' ROW_FORMAT = DYNAMIC;
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `course_id` bigint NOT NULL COMMENT '课程ID',
+  `video_id` bigint NULL DEFAULT NULL COMMENT '视频ID（可选）',
+  `progress_seconds` double NULL DEFAULT 0 COMMENT '当前观看秒数',
+  `total_seconds` double NULL DEFAULT 0 COMMENT '视频总时长',
+  `last_updated` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `progress_percent` float NULL DEFAULT NULL COMMENT '当前观看进度百分比',
+  `max_progress_percent` float NULL DEFAULT 0 COMMENT '最高观看进度百分比',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uniq_user_course_video`(`user_id` ASC, `course_id` ASC, `video_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '课程学习进度记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of courses
+-- Records of courseprogress
 -- ----------------------------
-INSERT INTO `courses` VALUES (1, '2025-06-25 15:57:17', '深入浅出计算机网络', '一门全面的计算机网络入门课程', '计算机科学', NULL, 'http://example.com/cover.jpg', 0, 0, NULL, 0, 0);
-INSERT INTO `courses` VALUES (21, '2024-03-05 18:16:45', '动画鉴赏', NULL, '课程类型1', 1, 'upload/kechengxinxi_kechengtupian1.jpg,upload/kechengxinxi_kechengtupian2.jpg,upload/kechengxinxi_kechengtupian3.jpg', 2, 1, '2024-03-05 18:16:45', 82, 3);
-INSERT INTO `courses` VALUES (22, '2024-03-05 18:16:45', '课程名称2', NULL, '课程类型2', 2, 'upload/kechengxinxi_kechengtupian2.jpg,upload/kechengxinxi_kechengtupian3.jpg,upload/kechengxinxi_kechengtupian4.jpg', 2, 2, '2024-03-05 18:16:45', 21, 3);
-INSERT INTO `courses` VALUES (23, '2024-03-05 18:16:45', '课程名称3', NULL, '课程类型3', 3, 'upload/kechengxinxi_kechengtupian3.jpg,upload/kechengxinxi_kechengtupian4.jpg,upload/kechengxinxi_kechengtupian5.jpg', 3, 3, '2024-03-05 18:16:45', 59, 3);
-INSERT INTO `courses` VALUES (24, '2024-03-05 18:16:45', '课程名称4', NULL, '课程类型4', 4, 'upload/kechengxinxi_kechengtupian4.jpg,upload/kechengxinxi_kechengtupian5.jpg,upload/kechengxinxi_kechengtupian6.jpg', 4, 4, '2024-03-05 18:16:45', 7, 4);
-INSERT INTO `courses` VALUES (25, '2024-03-05 18:16:45', '课程名称5', NULL, '课程类型5', 5, 'upload/kechengxinxi_kechengtupian5.jpg,upload/kechengxinxi_kechengtupian6.jpg,upload/kechengxinxi_kechengtupian7.jpg', 5, 5, '2024-03-05 18:16:45', 11, 5);
-INSERT INTO `courses` VALUES (26, '2024-03-05 18:16:45', '课程名称6', NULL, '课程类型6', 6, 'upload/kechengxinxi_kechengtupian6.jpg,upload/kechengxinxi_kechengtupian7.jpg,upload/kechengxinxi_kechengtupian8.jpg', 6, 6, '2024-03-05 18:16:45', 6, 6);
-INSERT INTO `courses` VALUES (27, '2024-03-05 18:16:45', '课程名称7', NULL, '课程类型7', 7, 'upload/kechengxinxi_kechengtupian7.jpg,upload/kechengxinxi_kechengtupian8.jpg,upload/kechengxinxi_kechengtupian9.jpg', 7, 7, '2024-03-05 18:16:45', 7, 7);
-INSERT INTO `courses` VALUES (28, '2024-03-05 18:16:45', '课程名称8', NULL, '课程类型8', 8, 'upload/kechengxinxi_kechengtupian8.jpg,upload/kechengxinxi_kechengtupian9.jpg,upload/kechengxinxi_kechengtupian10.jpg', 8, 8, '2024-03-05 18:16:45', 14, 8);
-INSERT INTO `courses` VALUES (29, '2024-03-05 18:25:12', 'XX课程', NULL, '数学课程', 9, 'upload/1709634300048.jpg', 0, 0, NULL, 2, 0);
-INSERT INTO `courses` VALUES (30, '2025-06-24 15:21:57', '王道操作系统', NULL, '计算机科学', 10, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/images/test.jpg', 0, 0, '2025-06-24 15:22:45', 46, 0);
+INSERT INTO `courseprogress` VALUES (3, 1709634123827, 21, 2, 500.735409, 1095.445, '2025-06-25 14:45:40', 0.4571, 1);
+INSERT INTO `courseprogress` VALUES (4, 1709634123827, 30, 1, 5.817974, 1236.906, '2025-06-25 11:58:43', 0.0047, 0.0047);
+INSERT INTO `courseprogress` VALUES (5, 1709634123827, 23, 3, 285.981823, 1236.906, '2025-06-25 14:56:13', 0.2312, 0.2312);
 
 -- ----------------------------
 -- Table structure for coursevideos
@@ -102,7 +71,7 @@ CREATE TABLE `coursevideos`  (
   `video_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of coursevideos
@@ -144,7 +113,7 @@ INSERT INTO `forum` VALUES (65, '2024-03-05 18:16:46', '帖子标题5', '帖子�
 INSERT INTO `forum` VALUES (66, '2024-03-05 18:16:46', '帖子标题6', '帖子内容6', 0, 6, '用户名6', 'upload/forum_avatarurl6.jpg,upload/forum_avatarurl7.jpg,upload/forum_avatarurl8.jpg', '开放', 0, '2024-03-05 18:16:46');
 INSERT INTO `forum` VALUES (67, '2024-03-05 18:16:46', '帖子标题7', '帖子内容7', 0, 7, '用户名7', 'upload/forum_avatarurl7.jpg,upload/forum_avatarurl8.jpg,upload/forum_avatarurl9.jpg', '开放', 0, '2024-03-05 18:16:46');
 INSERT INTO `forum` VALUES (68, '2024-03-05 18:16:46', '帖子标题8', '帖子内容8', 0, 8, '用户名8', 'upload/forum_avatarurl8.jpg,upload/forum_avatarurl9.jpg,upload/forum_avatarurl10.jpg', '开放', 0, '2024-03-05 18:16:46');
-INSERT INTO `forum` VALUES (69, '2024-03-05 18:23:16', '发布帖子', '<p>发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子</p>', 0, 12, '用户账号2', NULL, '开放', 1, '2025-06-25 16:13:09');
+INSERT INTO `forum` VALUES (69, '2024-03-05 18:23:16', '发布帖子', '<p>发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子发布帖子</p>', 0, 12, '用户账号2', NULL, '开放', 0, '2024-03-05 18:23:16');
 
 -- ----------------------------
 -- Table structure for kechengleixing
@@ -207,52 +176,40 @@ INSERT INTO `kechengpingjia` VALUES (48, '2024-03-05 18:16:46', '课程名称8',
 INSERT INTO `kechengpingjia` VALUES (49, '2024-03-05 18:23:06', '课程名称1', '课程类型1', 'upload/kechengxinxi_kechengtupian1.jpg', 'B', 'C', 'A', 'B', '2024-03-05', 'XXXX', '用户账号2', '用户姓名2', '是', '审核用户评价');
 
 -- ----------------------------
--- Table structure for learning_progress
+-- Table structure for kechengxinxi
 -- ----------------------------
-DROP TABLE IF EXISTS `learning_progress`;
-CREATE TABLE `learning_progress`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint NOT NULL COMMENT '用户ID',
-  `lesson_id` bigint NOT NULL COMMENT '课时ID',
-  `progress_seconds` int NULL DEFAULT 0 COMMENT '学习进度（秒）',
-  `is_completed` tinyint(1) NULL DEFAULT 0 COMMENT '是否已完成',
-  `last_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uniq_user_lesson`(`user_id` ASC, `lesson_id` ASC) USING BTREE,
-  INDEX `lesson_id`(`lesson_id` ASC) USING BTREE,
-  CONSTRAINT `learning_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `yonghu` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `learning_progress_ibfk_2` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '学习进度跟踪表' ROW_FORMAT = Dynamic;
+DROP TABLE IF EXISTS `kechengxinxi`;
+CREATE TABLE `kechengxinxi`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `kechengmingcheng` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程名称',
+  `kechengleixing` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程类型',
+  `kechengkeshi` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程课时',
+  `kechengpingfen` int NULL DEFAULT NULL COMMENT '课程评分',
+  `kechengneirong` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '课程内容',
+  `kechengtupian` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '课程图片',
+  `thumbsupnum` int NULL DEFAULT 0 COMMENT '赞',
+  `crazilynum` int NULL DEFAULT 0 COMMENT '踩',
+  `clicktime` datetime NULL DEFAULT NULL COMMENT '最近点击时间',
+  `clicknum` int NULL DEFAULT 0 COMMENT '点击次数',
+  `storeupnum` int NULL DEFAULT 0 COMMENT '收藏数',
+  `contentpdfurl` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '课程信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of learning_progress
+-- Records of kechengxinxi
 -- ----------------------------
-
--- ----------------------------
--- Table structure for lessons
--- ----------------------------
-DROP TABLE IF EXISTS `lessons`;
-CREATE TABLE `lessons`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `chapter_id` bigint NOT NULL COMMENT '所属章节ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '课时标题',
-  `lesson_order` int NOT NULL DEFAULT 0 COMMENT '课时显示顺序',
-  `lesson_type` enum('video','article','quiz') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'video' COMMENT '课时类型',
-  `video_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '视频播放地址',
-  `duration_seconds` int NULL DEFAULT NULL COMMENT '内容时长(秒)',
-  `content_for_ai` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '用于AI问答的文本内容',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `chapter_id`(`chapter_id` ASC) USING BTREE,
-  CONSTRAINT `lessons_ibfk_1` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '课程课时表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of lessons
--- ----------------------------
-INSERT INTO `lessons` VALUES (2, 1, '1.1 - OSI七层模型', 1, 'video', 'http://example.com/video1.mp4', 600, '这是OSI七层模型的视频文字稿...', '2025-06-25 15:57:17');
-INSERT INTO `lessons` VALUES (3, 1, '1.2 - 课后阅读：TCP/IP协议栈', 2, 'article', NULL, NULL, 'TCP/IP协议栈是互联网的核心...', '2025-06-25 15:57:17');
-INSERT INTO `lessons` VALUES (4, 2, '2.1 - 信号与编码', 1, 'video', 'http://example.com/video2.mp4', 800, '关于物理层的信号与编码...', '2025-06-25 15:57:17');
+INSERT INTO `kechengxinxi` VALUES (21, '2024-03-05 18:16:45', '动画鉴赏', '课程类型1', '课程课时1', 1, '课程内容1', 'upload/kechengxinxi_kechengtupian1.jpg,upload/kechengxinxi_kechengtupian2.jpg,upload/kechengxinxi_kechengtupian3.jpg', 2, 1, '2024-03-05 18:16:45', 82, 3, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/pdfs/57a57416-f321-4fe5-b28c-cd50673e0a16-王道计算机组成原理.pdf');
+INSERT INTO `kechengxinxi` VALUES (22, '2024-03-05 18:16:45', '课程名称2', '课程类型2', '课程课时2', 2, '课程内容2', 'upload/kechengxinxi_kechengtupian2.jpg,upload/kechengxinxi_kechengtupian3.jpg,upload/kechengxinxi_kechengtupian4.jpg', 2, 2, '2024-03-05 18:16:45', 21, 3, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (23, '2024-03-05 18:16:45', '课程名称3', '课程类型3', '课程课时3', 3, '课程内容3', 'upload/kechengxinxi_kechengtupian3.jpg,upload/kechengxinxi_kechengtupian4.jpg,upload/kechengxinxi_kechengtupian5.jpg', 3, 3, '2024-03-05 18:16:45', 59, 3, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/pdfs/23b14725-8dfd-42fe-8fb6-77f9adbe15fc-王道计算机组成原理.pdf');
+INSERT INTO `kechengxinxi` VALUES (24, '2024-03-05 18:16:45', '课程名称4', '课程类型4', '课程课时4', 4, '课程内容4', 'upload/kechengxinxi_kechengtupian4.jpg,upload/kechengxinxi_kechengtupian5.jpg,upload/kechengxinxi_kechengtupian6.jpg', 4, 4, '2024-03-05 18:16:45', 7, 4, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (25, '2024-03-05 18:16:45', '课程名称5', '课程类型5', '课程课时5', 5, '课程内容5', 'upload/kechengxinxi_kechengtupian5.jpg,upload/kechengxinxi_kechengtupian6.jpg,upload/kechengxinxi_kechengtupian7.jpg', 5, 5, '2024-03-05 18:16:45', 11, 5, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (26, '2024-03-05 18:16:45', '课程名称6', '课程类型6', '课程课时6', 6, '课程内容6', 'upload/kechengxinxi_kechengtupian6.jpg,upload/kechengxinxi_kechengtupian7.jpg,upload/kechengxinxi_kechengtupian8.jpg', 6, 6, '2024-03-05 18:16:45', 6, 6, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (27, '2024-03-05 18:16:45', '课程名称7', '课程类型7', '课程课时7', 7, '课程内容7', 'upload/kechengxinxi_kechengtupian7.jpg,upload/kechengxinxi_kechengtupian8.jpg,upload/kechengxinxi_kechengtupian9.jpg', 7, 7, '2024-03-05 18:16:45', 7, 7, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (28, '2024-03-05 18:16:45', '课程名称8', '课程类型8', '课程课时8', 8, '课程内容8', 'upload/kechengxinxi_kechengtupian8.jpg,upload/kechengxinxi_kechengtupian9.jpg,upload/kechengxinxi_kechengtupian10.jpg', 8, 8, '2024-03-05 18:16:45', 14, 8, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (29, '2024-03-05 18:25:12', 'XX课程', '数学课程', '50小时', 9, '<p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p><p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p><p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p><p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p><p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p><p>文本框支持输入详情内容和图片文本框支持输入详情内容和图片</p>', 'upload/1709634300048.jpg', 0, 0, NULL, 2, 0, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E6%96%B0%E5%BB%BA%20DOCX%20%E6%96%87%E6%A1%A3.pdf');
+INSERT INTO `kechengxinxi` VALUES (30, '2025-06-24 15:21:57', '王道操作系统', '计算机科学', '40', 10, '操作系统', 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/images/test.jpg', 0, 0, '2025-06-24 15:22:45', 46, 0, 'https://smart-core.obs.cn-north-4.myhuaweicloud.com/files/%E7%8E%8B%E9%81%93%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86.pdf');
 
 -- ----------------------------
 -- Table structure for messages
@@ -352,9 +309,9 @@ CREATE TABLE `token`  (
 -- ----------------------------
 -- Records of token
 -- ----------------------------
-INSERT INTO `token` VALUES (1, 1709634123827, '111', 'yonghu', '用户', 'tjh9jlkk7yoxx7x70mvnuh59sq3d0inr', '2024-03-05 18:22:07', '2025-06-25 18:22:51');
+INSERT INTO `token` VALUES (1, 1709634123827, '111', 'yonghu', '用户', 'aw8yd0488lxerupnm4mkqxoo7sfd8ysk', '2024-03-05 18:22:07', '2025-06-25 15:56:07');
 INSERT INTO `token` VALUES (2, 12, '用户账号2', 'yonghu', '用户', '8ir9fw4fbnhfj9vptcvv95c909fqvnoe', '2024-03-05 18:22:29', '2024-03-05 19:22:30');
-INSERT INTO `token` VALUES (3, 1, 'admin', 'users', '管理员', 'yyvuc4fafhf1i7a9aupu3gosimrjgpcd', '2024-03-05 18:24:18', '2025-06-25 18:23:02');
+INSERT INTO `token` VALUES (3, 1, 'admin', 'users', '管理员', 'iwsscw47nozfokcb0svzdnhlw00ewcay', '2024-03-05 18:24:18', '2025-06-25 15:09:55');
 
 -- ----------------------------
 -- Table structure for users
@@ -374,6 +331,40 @@ CREATE TABLE `users`  (
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES (1, 'admin', 'admin', 'upload/image1.jpg', '管理员', '2024-03-05 18:16:46');
+
+-- ----------------------------
+-- Table structure for xuexijindu
+-- ----------------------------
+DROP TABLE IF EXISTS `xuexijindu`;
+CREATE TABLE `xuexijindu`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `kechengmingcheng` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程名称',
+  `kechengleixing` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '课程类型',
+  `kechengtupian` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '课程图片',
+  `xuexishizhang` int NULL DEFAULT NULL COMMENT '学习时长',
+  `xuexijindu` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '学习进度',
+  `xuexixiaoguo` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '学习效果',
+  `yiwanchengneirong` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '已完成内容',
+  `weiwanchengneirong` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '未完成内容',
+  `yonghuzhanghao` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '用户账号',
+  `yonghuxingming` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '用户姓名',
+  `watch_progress_seconds` double NULL DEFAULT 0 COMMENT '当前观看时间，单位：秒',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '学习进度' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of xuexijindu
+-- ----------------------------
+INSERT INTO `xuexijindu` VALUES (51, '2024-03-05 18:16:46', '课程名称1', '课程类型1', 'upload/xuexijindu_kechengtupian1.jpg,upload/xuexijindu_kechengtupian2.jpg,upload/xuexijindu_kechengtupian3.jpg', 1, '10%', '学习效果1', '已完成内容1', '未完成内容1', '用户账号1', '用户姓名1', 0);
+INSERT INTO `xuexijindu` VALUES (52, '2024-03-05 18:16:46', '课程名称2', '课程类型2', 'upload/xuexijindu_kechengtupian2.jpg,upload/xuexijindu_kechengtupian3.jpg,upload/xuexijindu_kechengtupian4.jpg', 2, '10%', '学习效果2', '已完成内容2', '未完成内容2', '用户账号2', '用户姓名2', 0);
+INSERT INTO `xuexijindu` VALUES (53, '2024-03-05 18:16:46', '课程名称3', '课程类型3', 'upload/xuexijindu_kechengtupian3.jpg,upload/xuexijindu_kechengtupian4.jpg,upload/xuexijindu_kechengtupian5.jpg', 3, '10%', '学习效果3', '已完成内容3', '未完成内容3', '用户账号3', '用户姓名3', 0);
+INSERT INTO `xuexijindu` VALUES (54, '2024-03-05 18:16:46', '课程名称4', '课程类型4', 'upload/xuexijindu_kechengtupian4.jpg,upload/xuexijindu_kechengtupian5.jpg,upload/xuexijindu_kechengtupian6.jpg', 4, '10%', '学习效果4', '已完成内容4', '未完成内容4', '用户账号4', '用户姓名4', 0);
+INSERT INTO `xuexijindu` VALUES (55, '2024-03-05 18:16:46', '课程名称5', '课程类型5', 'upload/xuexijindu_kechengtupian5.jpg,upload/xuexijindu_kechengtupian6.jpg,upload/xuexijindu_kechengtupian7.jpg', 5, '10%', '学习效果5', '已完成内容5', '未完成内容5', '用户账号5', '用户姓名5', 0);
+INSERT INTO `xuexijindu` VALUES (56, '2024-03-05 18:16:46', '课程名称6', '课程类型6', 'upload/xuexijindu_kechengtupian6.jpg,upload/xuexijindu_kechengtupian7.jpg,upload/xuexijindu_kechengtupian8.jpg', 6, '10%', '学习效果6', '已完成内容6', '未完成内容6', '用户账号6', '用户姓名6', 0);
+INSERT INTO `xuexijindu` VALUES (57, '2024-03-05 18:16:46', '课程名称7', '课程类型7', 'upload/xuexijindu_kechengtupian7.jpg,upload/xuexijindu_kechengtupian8.jpg,upload/xuexijindu_kechengtupian9.jpg', 7, '10%', '学习效果7', '已完成内容7', '未完成内容7', '用户账号7', '用户姓名7', 0);
+INSERT INTO `xuexijindu` VALUES (58, '2024-03-05 18:16:46', '课程名称8', '课程类型8', 'upload/xuexijindu_kechengtupian8.jpg,upload/xuexijindu_kechengtupian9.jpg,upload/xuexijindu_kechengtupian10.jpg', 8, '10%', '学习效果8', '已完成内容8', '未完成内容8', '用户账号8', '用户姓名8', 0);
+INSERT INTO `xuexijindu` VALUES (59, '2024-03-05 18:25:45', 'XX课程', '数学课程', 'upload/1709634300048.jpg', 3, '60%', '比较好', 'XXX', 'XXX', '111', '张三', 0);
 
 -- ----------------------------
 -- Table structure for yonghu

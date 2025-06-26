@@ -8,21 +8,19 @@
         <result property="title" column="course_title"/>
         <result property="description" column="course_description"/>
         <result property="coverImageUrl" column="course_cover_image_url"/>
-
         <collection property="chapters" ofType="com.entity.ChapterEntity">
             <id property="id" column="chapter_id"/>
             <result property="title" column="chapter_title"/>
             <result property="chapterOrder" column="chapter_order"/>
-
-            <collection property="lessons" ofType="com.entity.LessonEntity">
-                <id property="id" column="lesson_id"/>
-                <result property="title" column="lesson_title"/>
-                <result property="lessonOrder" column="lesson_order"/>
-                <result property="lessonType" column="lesson_type"/>
-                <result property="videoUrl" column="video_url"/>
-                <result property="durationSeconds" column="duration_seconds"/>
-                <result property="contentForAi" column="content_for_ai"/>
-            </collection>
+            <result property="courseId" column="chapter_course_id"/> <collection property="lessons" ofType="com.entity.LessonEntity">
+            <id property="id" column="lesson_id"/>
+            <result property="title" column="lesson_title"/>
+            <result property="lessonOrder" column="lesson_order"/>
+            <result property="lessonType" column="lesson_type"/>
+            <result property="videoUrl" column="video_url"/>
+            <result property="durationSeconds" column="duration_seconds"/>
+            <result property="contentForAi" column="content_for_ai"/>
+            <result property="chapterId" column="lesson_chapter_id"/> </collection>
         </collection>
     </resultMap>
 
@@ -32,16 +30,21 @@
             c.title AS course_title,
             c.description AS course_description,
             c.cover_image_url AS course_cover_image_url,
+            c.clicknum,
+            c.thumbsupnum,
+            c.crazilynum,
             ch.id AS chapter_id,
             ch.title AS chapter_title,
             ch.chapter_order,
+            ch.course_id AS chapter_course_id,
             l.id AS lesson_id,
             l.title AS lesson_title,
             l.lesson_order,
             l.lesson_type,
             l.video_url,
             l.duration_seconds,
-            l.content_for_ai
+            l.content_for_ai,
+            l.chapter_id AS lesson_chapter_id
         FROM
             courses c
                 LEFT JOIN
@@ -51,6 +54,27 @@
         WHERE
             c.id = #{id}
         ORDER BY
-            ch.chapter_order ASC, l.lesson_order ASC;
+            ch.chapter_order ASC, l.lesson_order ASC
     </select>
+
+    <select id="selectListVO" resultType="com.entity.vo.CourseVO">
+        SELECT * FROM courses course
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectVO" resultType="com.entity.vo.CourseVO">
+        SELECT course.* FROM courses course
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectListView" resultType="com.entity.view.CourseView">
+        SELECT course.* FROM courses course
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectView" resultType="com.entity.view.CourseView">
+        SELECT * FROM courses course
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
 </mapper>

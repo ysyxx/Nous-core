@@ -8,16 +8,17 @@ import com.entity.view.YonghuView;
 import com.service.TokenService;
 import com.service.YonghuService;
 import com.utils.MPUtil;
+import com.utils.OBSUtil;
 import com.utils.PageUtils;
 import com.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 用户
@@ -33,8 +34,8 @@ public class YonghuController {
     private YonghuService yonghuService;
 
 
-
-
+    @Autowired
+    private OBSUtil obsUtil;
 
 	@Autowired
 	private TokenService tokenService;
@@ -272,7 +273,50 @@ public class YonghuController {
     }
 
 
+    @PostMapping("/uploadAvatar")
+    @SysLog("用户上传头像")
+    public R uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        // 1. 获取当前登录用户ID
+        Long userId = (Long) request.getSession().getAttribute("userId");
+        if (userId == null) {
+            return R.error(401, "请先登录才能上传头像。");
+        }
 
+        // 2. 检查文件是否为空
+        if (file.isEmpty()) {
+            return R.error("上传文件不能为空。");
+        }
+        YonghuEntity user = yonghuService.selectById(userId);
+        try {
+            // 3. 上传文件到对象存储 (例如 OBS)
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+            String fileNameInObs = "avatars/" + UUID.randomUUID().toString() + fileExtension;
+            String avatarUrl = obsUtil.uploadFile(fileNameInObs, file.getInputStream());
+
+            // **修改：将更新数据库的逻辑委托给 Service 层**
+            boolean updateSuccess = yonghuService.updateUserAvatar(userId, avatarUrl);
+
+            if (updateSuccess) {
+                // 返回成功响应，包含新的头像URL
+                Map<String, String> result = new HashMap<>();
+                result.put("avatarUrl", avatarUrl);
+                return R.ok("头像上传成功并已更新。").put("data", result);
+            } else {
+                // 数据库更新失败（例如用户ID不存在）
+                return R.error("头像上传成功，但保存到数据库失败，可能用户不存在。");
+            }
+
+        } catch (IOException e) {
+            return R.error("头像文件读取或上传失败: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("头像上传或更新异常: " + e.getMessage());
+        }
+    }
 
 
 

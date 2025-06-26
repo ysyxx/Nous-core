@@ -15,11 +15,11 @@
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程名称" prop="kechengmingcheng">
 					<el-input v-model="ruleForm.kechengmingcheng" placeholder="课程名称" readonly></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="课程类型" prop="kechengleixing">
-					<el-input v-model="ruleForm.kechengleixing" placeholder="课程类型" clearable  :readonly="ro.kechengleixing"></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="课程类型" prop="lessonType">
+					<el-input v-model="ruleForm.lessonType" placeholder="课程类型" clearable  :readonly="ro.lessonType"></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="kechengleixing">
-					<el-input v-model="ruleForm.kechengleixing" placeholder="课程类型" readonly></el-input>
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="lessonType">
+					<el-input v-model="ruleForm.lessonType" placeholder="课程类型" readonly></el-input>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="upload" v-if="type!='info' && !ro.kechengtupian" label="课程图片" prop="kechengtupian">
 					<file-upload
@@ -224,7 +224,7 @@ export default {
 			
 			ro:{
 				kechengmingcheng : false,
-				kechengleixing : false,
+				lessonType : false,
 				kechengtupian : false,
 				jiaoxuemubiao : false,
 				jiaoxuefangfa : false,
@@ -241,7 +241,7 @@ export default {
 			
 			ruleForm: {
 				kechengmingcheng: '',
-				kechengleixing: '',
+				lessonType: '',
 				kechengtupian: '',
 				jiaoxuemubiao: '',
 				jiaoxuefangfa: '',
@@ -263,7 +263,7 @@ export default {
 			rules: {
 				kechengmingcheng: [
 				],
-				kechengleixing: [
+				lessonType: [
 				],
 				kechengtupian: [
 				],
@@ -326,9 +326,9 @@ export default {
 							this.ro.kechengmingcheng = true;
 							continue;
 						}
-						if(o=='kechengleixing'){
-							this.ruleForm.kechengleixing = obj[o];
-							this.ro.kechengleixing = true;
+						if(o=='lessonType'){
+							this.ruleForm.lessonType = obj[o];
+							this.ro.lessonType = true;
 							continue;
 						}
 						if(o=='kechengtupian'){

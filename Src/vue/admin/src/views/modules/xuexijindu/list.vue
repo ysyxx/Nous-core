@@ -10,7 +10,7 @@
 					</div>
 					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}'>
 						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">课程类型</label>
-						<el-input v-model="searchForm.kechengleixing" placeholder="课程类型" @keydown.enter.native="search()" clearable></el-input>
+						<el-input v-model="searchForm.lessonType" placeholder="课程类型" @keydown.enter.native="search()" clearable></el-input>
 					</div>
 					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}' class="select" label="学习进度" prop="xuexijindu">
 						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">学习进度</label>
@@ -66,13 +66,13 @@
 							{{scope.row.kechengmingcheng}}
 						</template>
 					</el-table-column>
-					<!-- kechengleixing -->
+					<!-- lessonType -->
 					<!-- $column.hiden -->
 					<el-table-column :resizable='true' :sortable='true'  
-						prop="kechengleixing"
+						prop="lessonType"
 						label="课程类型">
 						<template slot-scope="scope">
-							{{scope.row.kechengleixing}}
+							{{scope.row.lessonType}}
 						</template>
 					</el-table-column>
 					<!-- kechengtupian -->
@@ -417,8 +417,8 @@ import AddOrUpdate from "./add-or-update";
            if(this.searchForm.kechengmingcheng!='' && this.searchForm.kechengmingcheng!=undefined){
             params['kechengmingcheng'] = '%' + this.searchForm.kechengmingcheng + '%'
           }
-           if(this.searchForm.kechengleixing!='' && this.searchForm.kechengleixing!=undefined){
-            params['kechengleixing'] = '%' + this.searchForm.kechengleixing + '%'
+           if(this.searchForm.lessonType!='' && this.searchForm.lessonType!=undefined){
+            params['lessonType'] = '%' + this.searchForm.lessonType + '%'
           }
            if(this.searchForm.xuexijindu!='' && this.searchForm.xuexijindu!=undefined){
             params['xuexijindu'] = this.searchForm.xuexijindu

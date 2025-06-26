@@ -8,10 +8,10 @@
 						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">课程名称</label>
 						<el-input v-model="searchForm.kechengmingcheng" placeholder="课程名称" @keydown.enter.native="search()" clearable></el-input>
 					</div>
-					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}' class="select" label="课程类型" prop="kechengleixing">
+					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}' class="select" label="课程类型" prop="lessonType">
 						<label :style='{"margin":"0 10px 0 0","color":"inherit","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">课程类型</label>
-						<el-select clearable v-model="searchForm.kechengleixing" placeholder="请选择课程类型" >
-							<el-option v-for="(item,index) in kechengleixingOptions" v-bind:key="index" :label="item" :value="item"></el-option>
+						<el-select clearable v-model="searchForm.lessonType" placeholder="请选择课程类型" >
+							<el-option v-for="(item,index) in lessonTypeOptions" v-bind:key="index" :label="item" :value="item"></el-option>
 						</el-select>
 					</div>
 					<div :style='{"margin":"0 0px 0 0","fontSize":"inherit","display":"inline-block"}'>
@@ -25,11 +25,11 @@
 				</el-row>
 
 				<el-row class="actions" :style='{"margin":"0px 0 20px","color":"#fff","flexWrap":"wrap","textAlign":"left","flexDirection":"row","display":"flex","width":"100%","fontSize":"inherit","order":"1"}'>
-					<el-button class="add" v-if="isAuth('kechengxinxi','新增')" type="success" @click="addOrUpdateHandler()">
+					<el-button class="add" v-if="isAuth('course','新增')" type="success" @click="addOrUpdateHandler()">
 						<span class="icon iconfont icon-tianjia14" :style='{"color":"inherit","margin":"0 2px","fontSize":"inherit"}'></span>
 						添加
 					</el-button>
-					<el-button class="del" v-if="isAuth('kechengxinxi','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()">
+					<el-button class="del" v-if="isAuth('course','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()">
 						<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 						删除
 					</el-button>
@@ -43,7 +43,7 @@
 					:stripe='false'
 					:style='{"padding":"0","borderColor":"#edf7ff","color":"inherit","borderRadius":"12px","borderWidth":"0px 0px 0 0px","background":"none","width":"100%","fontSize":"inherit","borderStyle":"solid"}' 
 					:border='true'
-					v-if="isAuth('kechengxinxi','查看')"
+					v-if="isAuth('course','查看')"
 					:data="dataList"
 					v-loading="dataListLoading"
 				@selection-change="selectionChangeHandler">
@@ -58,13 +58,13 @@
 							{{scope.row.kechengmingcheng}}
 						</template>
 					</el-table-column>
-					<!-- kechengleixing -->
+					<!-- lessonType -->
 					<!-- $column.hiden -->
 					<el-table-column :resizable='true' :sortable='true'  
-						prop="kechengleixing"
+						prop="lessonType"
 						label="课程类型">
 						<template slot-scope="scope">
-							{{scope.row.kechengleixing}}
+							{{scope.row.lessonType}}
 						</template>
 					</el-table-column>
 					<!-- kechengkeshi -->
@@ -133,19 +133,19 @@
 					</el-table-column>
 					<el-table-column width="300" label="操作">
 						<template slot-scope="scope">
-							<el-button class="view" v-if=" isAuth('kechengxinxi','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">
+							<el-button class="view" v-if=" isAuth('course','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">
 								<span class="icon iconfont icon-chakan2" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 								查看
 							</el-button>
-							<el-button class="btn8" v-if="isAuth('kechengxinxi','课程评价')" @click="kechengpingjiaCrossAddOrUpdateHandler(scope.row,'cross','','','','')" type="success">
+							<el-button class="btn8" v-if="isAuth('course','课程评价')" @click="kechengpingjiaCrossAddOrUpdateHandler(scope.row,'cross','','','','')" type="success">
 								<span class="icon iconfont icon-xihuan" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 								课程评价
 							</el-button>
-							<el-button class="btn8" v-if="isAuth('kechengxinxi','学习进度')" @click="xuexijinduCrossAddOrUpdateHandler(scope.row,'cross','','','','')" type="success">
+							<el-button class="btn8" v-if="isAuth('course','学习进度')" @click="xuexijinduCrossAddOrUpdateHandler(scope.row,'cross','','','','')" type="success">
 								<span class="icon iconfont icon-xihuan" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 								学习进度
 							</el-button>
-							<el-button class="edit" v-if=" isAuth('kechengxinxi','修改') " type="success" @click="addOrUpdateHandler(scope.row.id)">
+							<el-button class="edit" v-if=" isAuth('course','修改') " type="success" @click="addOrUpdateHandler(scope.row.id)">
 								<span class="icon iconfont icon-xiugai11" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 								修改
 							</el-button>
@@ -153,7 +153,7 @@
 
 
 
-							<el-button class="del" v-if="isAuth('kechengxinxi','删除') " type="primary" @click="deleteHandler(scope.row.id )">
+							<el-button class="del" v-if="isAuth('course','删除') " type="primary" @click="deleteHandler(scope.row.id )">
 								<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 2px","fontSize":"inherit","color":"inherit","height":"40px"}'></span>
 								删除
 							</el-button>
@@ -197,7 +197,7 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 	export default {
 		data() {
 			return {
-				kechengleixingOptions: [],
+				lessonTypeOptions: [],
 				searchForm: {
 					key: ""
 				},
@@ -269,7 +269,7 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 				this.addOrUpdateFlag = false;
 				this.kechengpingjiaCrossAddOrUpdateFlag = true;
 				this.$storage.set('crossObj',row);
-				this.$storage.set('crossTable','kechengxinxi');
+				this.$storage.set('crossTable','course');
 				this.$storage.set('statusColumnName',statusColumnName);
 				this.$storage.set('statusColumnValue',statusColumnValue);
 				this.$storage.set('tips',tips);
@@ -300,7 +300,7 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 				this.addOrUpdateFlag = false;
 				this.xuexijinduCrossAddOrUpdateFlag = true;
 				this.$storage.set('crossObj',row);
-				this.$storage.set('crossTable','kechengxinxi');
+				this.$storage.set('crossTable','course');
 				this.$storage.set('statusColumnName',statusColumnName);
 				this.$storage.set('statusColumnValue',statusColumnValue);
 				this.$storage.set('tips',tips);
@@ -334,11 +334,11 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 
     init () {
           this.$http({
-            url: `option/kechengleixing/kechengleixing`,
+            url: `option/lessonType/lessonType`,
             method: "get"
           }).then(({ data }) => {
             if (data && data.code === 0) {
-              this.kechengleixingOptions = data.data;
+              this.lessonTypeOptions = data.data;
             } else {
               this.$message.error(data.msg);
             }
@@ -361,8 +361,8 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
            if(this.searchForm.kechengmingcheng!='' && this.searchForm.kechengmingcheng!=undefined){
             params['kechengmingcheng'] = '%' + this.searchForm.kechengmingcheng + '%'
           }
-           if(this.searchForm.kechengleixing!='' && this.searchForm.kechengleixing!=undefined){
-            params['kechengleixing'] = this.searchForm.kechengleixing
+           if(this.searchForm.lessonType!='' && this.searchForm.lessonType!=undefined){
+            params['lessonType'] = this.searchForm.lessonType
           }
            if(this.searchForm.kechengkeshi!='' && this.searchForm.kechengkeshi!=undefined){
             params['kechengkeshi'] = '%' + this.searchForm.kechengkeshi + '%'
@@ -372,7 +372,7 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 			let user = JSON.parse(this.$storage.getObj('userForm'))
 			console.log(user)
 			this.$http({
-				url: "kechengxinxi/page",
+				url: "course/page",
 				method: "get",
 				params: params
 			}).then(({ data }) => {
@@ -475,12 +475,12 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
 		}
 		window.open((location.href.split(this.$base.name).length>1 ? location.href.split(this.$base.name)[0] + this.$base.name + '/' + file :this.$base.url + file))
 	},
-	kechengxinxistatusChange(e,row){
+	coursestatusChange(e,row){
 		if(row.status==0){
 			row.passwordwrongnum = 0
 		}
 		this.$http({
-			url:'kechengxinxi/update',
+			url:'course/update',
 			method:'post',
 			data:row
 		}).then(res=>{
@@ -504,7 +504,7 @@ import xuexijinduCrossAddOrUpdate from "../xuexijindu/add-or-update";
         type: "warning"
       }).then(() => {
         this.$http({
-          url: "kechengxinxi/delete",
+          url: "course/delete",
           method: "post",
           data: ids
         }).then(({ data }) => {

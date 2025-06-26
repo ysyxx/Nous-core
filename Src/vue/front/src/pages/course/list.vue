@@ -15,11 +15,15 @@
 	
     <el-form :inline="true" :model="formSearch" class="list-form-pv" :style='{"padding":"0px 7% 20px","margin":"20px 0 0","borderColor":"#ddd","alignItems":"center","flexWrap":"wrap","background":"none","borderWidth":"0 0 1px","display":"flex","width":"100%","borderStyle":"solid","height":"auto","order":"1"}'>
       <el-form-item :style='{"margin":"0 10px"}'>
-	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程类型：</div>
-        <el-input v-model="formSearch.kechengleixing" placeholder="课程类型" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
+	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程名称：</div>
+        <el-input v-model="formSearch.kechengmingcheng" placeholder="课程名称" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
+      </el-form-item>
+      <el-form-item :style='{"margin":"0 10px"}'>
+	    <div class="lable" v-if="true" :style='{"width":"auto","padding":"0 10px","lineHeight":"42px","display":"inline-block"}'>课程课时：</div>
+        <el-input v-model="formSearch.kechengkeshi" placeholder="课程课时" @keydown.enter.native="getList(1, curFenlei)" clearable></el-input>
       </el-form-item>
 	  <el-button v-if=" true " :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#F5BB00","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="getList(1, curFenlei)"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-search"></i>查询</el-button>
-	  <el-button v-if="btnAuth('kechengleixing','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#333","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="add('/index/kechengleixingAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>
+	  <el-button v-if="btnAuth('course','新增')" :style='{"cursor":"pointer","border":"0","padding":"0px 15px","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"0px","background":"#333","width":"auto","fontSize":"14px","lineHeight":"36px","height":"36px"}' type="primary" @click="add('/index/courseAdd')"><i v-if="true" :style='{"color":"#fff","margin":"0 10px 0 0","fontSize":"14px"}' class="el-icon-circle-plus-outline"></i>添加</el-button>
     </el-form>
 	<div class="select2" :style='{"width":"100%","padding":"0 7%","margin":"10px 0 0","background":"#fff","height":"auto","order":"2"}'>
 	  <div :style='{"padding":"0px","margin":"4px 0","borderColor":"#eee","background":"none","borderWidth":"0 0 1px","width":"100%","position":"relative","borderStyle":"dashed","height":"auto"}' class="list" v-for="(item,index) in selectOptionsList" :key="item">
@@ -30,21 +34,46 @@
 	    </div>
 	  </div>
 	</div>
+	<div class="sort_view" :style='{"width":"100%","padding":"0 7%","margin":"20px auto 10px","textAlign":"right","background":"#fff","order":"3"}'>
+		<el-button :style='{"border":"0","padding":"0 15px","margin":"0 5px","borderRadius":"0px"}' @click="sortClick('clicknum')">
+			<span :style='{"margin":"0 2px 0 0","lineHeight":"40px","fontSize":"14px","color":"#333"}' class="icon iconfont icon-xiaoliang13" v-if="sortType!='clicknum'"></span>
+			<span :style='{"margin":"0 2px 0 0","lineHeight":"40px","fontSize":"14px","color":"#333"}' class="icon iconfont icon-xiaoliang13" v-else-if="sortType=='clicknum'&&sortOrder=='desc'"></span>
+			<span :style='{"margin":"0 2px 0 0","lineHeight":"40px","fontSize":"14px","color":"#333"}' class="icon iconfont icon-xiaoliang13" v-else-if="sortType=='clicknum'&&sortOrder=='asc'"></span>
+			<span :style='{"color":"#333","lineHeight":"40px","fontSize":"14px"}'>点击量</span>
+		</el-button>
+	</div>
 	<div class="list" :style='{"width":"100%","padding":"0 7%","margin":"10px auto","background":"#fff","order":"4"}'>
 		
 		<!-- 样式三 -->
 		<div class="list3 index-pv1" :style='{"padding":"0 0px","overflow":"hidden","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","clear":"both","justifyContent":"space-between","height":"auto"}'>
 		  <div v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="list-item animation-box">
 		    <div :style='{"border":"1px solid #f6f6f6","width":"200px","padding":"0px","margin":"0 10px 0 0","overflow":"hidden","height":"200px"}' class="img-box">
+				<img @click.stop="imgPreView(item.kechengtupian)" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%"}' v-if="item.kechengtupian && item.kechengtupian.substr(0,4)=='http'" :src="item.kechengtupian.split(',')[0]" class="image" />
+				<img @click.stop="imgPreView(baseUrl + (item.kechengtupian?item.kechengtupian.split(',')[0]:''))" :style='{"width":"100%","objectFit":"cover","display":"block","height":"100%"}' v-else :src="baseUrl + (item.kechengtupian?item.kechengtupian.split(',')[0]:'')" class="image" />
 			</div>
 		    <div :style='{"padding":"0 10px","overflow":"hidden","flex":"1","display":"flex","height":"auto"}' class="item-info">
 		      <div :style='{"width":"50%","padding":"0","alignItems":"center","flexWrap":"wrap","flex":"1","display":"flex"}'>
+				<div class="title">{{item.kechengmingcheng}}</div>
+				<div class="title">{{item.lessonType}}</div>
 				<div v-if="item.price" class="price"><span :style='{"fontSize":"12px"}'>￥</span>{{item.price}}</div>
 		        <div :style='{"width":"100%","padding":"2px 10px","borderColor":"#f0f0f0","borderStyle":"dashed","borderWidth":"0 0 1px 0","display":"none"}' class="time">
 		          <span class="icon iconfont icon-shijian21"></span>
 		          <span class="text">{{item.addtime}}</span>
 		        </div>
+		        <div :style='{"padding":"2px 10px","borderColor":"#eee","borderStyle":"dashed","borderWidth":"0 0 1px 0"}' class="like">
+		          <span class="icon iconfont icon-zan10"></span>
+		          <span class="text">{{item.thumbsupnum}}</span>
+		        </div>
+		        <div :style='{"padding":"2px 10px","borderColor":"#eee","borderStyle":"dashed","borderWidth":"0 0 1px 0"}' class="collect">
+		          <span class="icon iconfont icon-shoucang10"></span>
+		          <span class="text">{{item.storeupnum}}</span>
+		        </div>
+		        <div :style='{"padding":"2px 10px","borderColor":"#f0f0f0","borderStyle":"dashed","borderWidth":"0 0 1px 0"}' class="view">
+		          <span class="icon iconfont icon-chakan9"></span>
+		          <span class="text">{{item.clicknum}}</span>
+		        </div>
 		      </div>
+		      <div class="desc" v-html="item.kechengneirong"></div>
 		    </div>
 		  </div>
 		</div>
@@ -89,11 +118,13 @@
         baseUrl: '',
         breadcrumbItem: [
           {
-            name: '课程类型'
+            name: '课程信息'
           }
         ],
         formSearch: {
-          kechengleixing: '',
+          kechengmingcheng: '',
+          lessonType: '',
+          kechengkeshi: '',
         },
         fenlei: [],
 		feileiColumn: '',
@@ -105,11 +136,12 @@
         curFenlei: '全部',
         isPlain: false,
         indexQueryCondition: '',
+	      lessonTypeOptions: [],
         timeRange: [],
 		centerType:false,
 		previewImg: '',
 		previewVisible: false,
-		sortType: 'id',
+		sortType: 'kechengpingfen',
 		sortOrder: 'desc',
       }
     },
@@ -118,6 +150,12 @@
 			this.centerType = true
 		}
 		this.baseUrl = this.$config.baseUrl;
+		this.$http.get('option/lesson_type/lesson_type').then(res => {
+			if (res.data.code == 0) {
+				this.lessonTypeOptions = res.data.data;
+				this.selectOptionsList.push({name:'课程类型',list:this.lessonTypeOptions,tableName: 'lessonType',check: -1})
+			}
+		});
       this.getFenlei();
       this.getList(1, '全部');
     },
@@ -144,11 +182,13 @@
       getList(page, fenlei, ref = '') {
         let params = {page, limit: this.pageSize};
         let searchWhere = {};
-        if (this.formSearch.kechengleixing != '') searchWhere.kechengleixing = '%' + this.formSearch.kechengleixing + '%';
+        if (this.formSearch.kechengmingcheng != '') searchWhere.kechengmingcheng = '%' + this.formSearch.kechengmingcheng + '%';
+        if (this.formSearch.lessonType != '') searchWhere.lessonType = this.formSearch.lessonType;
+        if (this.formSearch.kechengkeshi != '') searchWhere.kechengkeshi = '%' + this.formSearch.kechengkeshi + '%';
 			let user = JSON.parse(localStorage.getItem('sessionForm'))
 		if (this.sortType) searchWhere.sort = this.sortType
 		if (this.sortOrder) searchWhere.order = this.sortOrder
-        this.$http.get(`kechengleixing/${this.centerType?'page':'list'}`, {params: Object.assign(params, searchWhere)}).then(res => {
+        this.$http.get(`course/${this.centerType?'page':'list'}`, {params: Object.assign(params, searchWhere)}).then(res => {
           if (res.data.code == 0) {
             this.dataList = res.data.data.list;
             this.total = Number(res.data.data.total);
@@ -159,6 +199,19 @@
           }
         });
       },
+	  sortClick(type){
+		  if(this.sortType==type){
+			  if(this.sortOrder == 'desc'){
+				  this.sortOrder = 'asc'
+			  }else{
+				  this.sortOrder = 'desc'
+			  }
+		  }else{
+			  this.sortType = type
+			  this.sortOrder = 'desc'
+		  }
+		  this.getList(1, '全部')
+	  },
       curChange(page) {
         this.getList(page);
       },
@@ -183,7 +236,7 @@
 		  if(this.centerType){
 			  params.centerType = 1
 		  }
-        this.$router.push({path: '/index/kechengleixingDetail', query: params});
+        this.$router.push({path: '/index/courseDetail', query: params});
       },
 	btnAuth(tableName,key){
 		if(this.centerType){

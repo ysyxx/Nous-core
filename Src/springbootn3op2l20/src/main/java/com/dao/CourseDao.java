@@ -7,6 +7,17 @@ import com.entity.CourseEntity;
 // 【关键】导入MyBatis的@Param注解
 import org.apache.ibatis.annotations.Param;
 
+// 导入MyBatis-Plus的Wrapper和Pagination类
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+
+// 导入新的VO和View类
+import com.entity.vo.CourseVO;
+import com.entity.view.CourseView;
+
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * 课程信息的数据访问接口
@@ -26,4 +37,14 @@ public interface CourseDao extends BaseMapper<CourseEntity> {
      */
     CourseEntity selectCourseWithDetails(@Param("id") Long id);
 
+    // 从 KechengxinxiDao 合并过来的方法
+    List<CourseVO> selectListVO(@Param("ew") Wrapper<CourseEntity> wrapper);
+
+    CourseVO selectVO(@Param("ew") Wrapper<CourseEntity> wrapper);
+
+    List<CourseView> selectListView(@Param("ew") Wrapper<CourseEntity> wrapper);
+
+    List<CourseView> selectListView(Pagination page, @Param("ew") Wrapper<CourseEntity> wrapper);
+
+    CourseView selectView(@Param("ew") Wrapper<CourseEntity> wrapper);
 }

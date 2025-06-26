@@ -8,7 +8,7 @@
 
 
 <!-- 商品推荐 -->
-<div id="animate_recommendkechengxinxi" class="recommend animate__animated" :style='{"width":"100%","padding":"20px 0","margin":"0 0 20px","background":"#f1f1f1","order":"1"}'>
+<div id="animate_recommendcourse" class="recommend animate__animated" :style='{"width":"100%","padding":"20px 0","margin":"0 0 20px","background":"#f1f1f1","order":"1"}'>
 	<div v-if="false" class="idea recommendIdea" :style='{"padding":"20px","flexWrap":"wrap","background":"#efefef","justifyContent":"space-between","display":"flex"}'>
 		<div class="box1" :style='{"width":"20%","background":"#fff","height":"80px"}'></div>
 		<div class="box2" :style='{"width":"20%","background":"#fff","height":"80px"}'></div>
@@ -38,13 +38,13 @@
 
 
 
-	<div v-if="kechengxinxiRecommend.length" class="list list12 index-pv1 list12kechengxinxi" :style='{"width":"100%","padding":"0 7%","background":"none","height":"auto"}'>
+	<div v-if="courseRecommend.length" class="list list12 index-pv1 list12course" :style='{"width":"100%","padding":"0 7%","background":"none","height":"auto"}'>
 	  <div class="list" :style='{"margin":"30px 0 0","overflow":"hidden","flexWrap":"wrap","flex":"1","background":"none","display":"flex","height":"auto"}'>
-	    <div :style='{"cursor":"pointer","width":"31.3%","margin":"0 2% 20px 0","overflow":"hidden","position":"relative","height":"auto"}' class="item list-item animation-box" v-for="item,index in kechengxinxiRecommend" :key="index" @click="toDetail('kechengxinxiDetail', item)">
+	    <div :style='{"cursor":"pointer","width":"31.3%","margin":"0 2% 20px 0","overflow":"hidden","position":"relative","height":"auto"}' class="item list-item animation-box" v-for="item,index in courseRecommend" :key="index" @click="toDetail('courseDetail', item)">
 			<img :name="item.id" :style='{"width":"100%","margin":"0 0 6px","objectFit":"cover","borderRadius":"6px","display":"block","height":"280px"}' v-if="preHttp(item.kechengtupian)" :src="item.kechengtupian.split(',')[0]" alt="" />
 			<img :name="item.id" :style='{"width":"100%","margin":"0 0 6px","objectFit":"cover","borderRadius":"6px","display":"block","height":"280px"}' v-else :src="baseUrl + (item.kechengtupian?item.kechengtupian.split(',')[0]:'')" alt="" />
 			<div class="line1" :style='{"padding":"0 10px","borderColor":"#ddd","margin":"0 0 6px","whiteSpace":"nowrap","color":"#333","overflow":"hidden","borderRadius":"6px","borderWidth":"0 0 1px","background":"#fff","width":"100%","lineHeight":"36px","fontSize":"14px","textOverflow":"ellipsis","borderStyle":"solid"}'>{{item.kechengmingcheng}}</div>
-			<div class="line1" :style='{"padding":"0 10px","borderColor":"#ddd","margin":"0 0 6px","whiteSpace":"nowrap","color":"#333","overflow":"hidden","borderRadius":"6px","borderWidth":"0 0 1px","background":"#fff","width":"100%","lineHeight":"36px","fontSize":"14px","textOverflow":"ellipsis","borderStyle":"solid"}'>{{item.kechengleixing}}</div>
+			<div class="line1" :style='{"padding":"0 10px","borderColor":"#ddd","margin":"0 0 6px","whiteSpace":"nowrap","color":"#333","overflow":"hidden","borderRadius":"6px","borderWidth":"0 0 1px","background":"#fff","width":"100%","lineHeight":"36px","fontSize":"14px","textOverflow":"ellipsis","borderStyle":"solid"}'>{{item.lessonType}}</div>
 	    </div>
 	  </div>
 	</div>
@@ -53,7 +53,7 @@
 
 
 	
-	<div @click="moreBtn('kechengxinxi')" :style='{"border":"0","cursor":"pointer","margin":"0px auto 20px","borderRadius":"6px","textAlign":"center","background":"#F5BB00","display":"block","width":"120px","lineHeight":"36px"}'>
+	<div @click="moreBtn('course')" :style='{"border":"0","cursor":"pointer","margin":"0px auto 20px","borderRadius":"6px","textAlign":"center","background":"#F5BB00","display":"block","width":"120px","lineHeight":"36px"}'>
 		<span :style='{"color":"#f5f5f5","fontSize":"14px"}'>查看更多</span>
 		<i :style='{"color":"#f5f5f5","fontSize":"12px"}' class="icon iconfont icon-gengduo1"></i>
 	</div>
@@ -75,7 +75,7 @@ import Swiper from "swiper";
       return {
         baseUrl: '',
         newsList: [],
-        kechengxinxiRecommend: [],
+        courseRecommend: [],
 
 
 
@@ -128,7 +128,7 @@ import Swiper from "swiper";
 				{id:'search',css:'animate__bounce'},
 				{id:'about',css:'animate__fadeInUp'},
 				{id:'system',css:'animate__fadeInUp'},
-				{id:'animate_recommendkechengxinxi',css:'animate__fadeInUp'},
+				{id:'animate_recommendcourse',css:'animate__fadeInUp'},
 				{id:'msgs',css:'animate__bounce'},
 				{id:'friendly',css:'animate__bounce'}
 			]
@@ -152,9 +152,9 @@ import Swiper from "swiper";
 		getList() {
 			let autoSortUrl = "";
 			let data = {}
-          autoSortUrl = "kechengxinxi/autoSort";
+          autoSortUrl = "course/autoSort";
           if(localStorage.getItem('frontToken')) {
-              autoSortUrl = "kechengxinxi/autoSort2";
+              autoSortUrl = "course/autoSort2";
           }
 			data = {
 				page: 1,
@@ -162,7 +162,7 @@ import Swiper from "swiper";
 			}
 			this.$http.get(autoSortUrl, {params: data}).then(res => {
 				if (res.data.code == 0) {
-					this.kechengxinxiRecommend = res.data.data.list;
+					this.courseRecommend = res.data.data.list;
 					
 					
 					// 商品列表样式五

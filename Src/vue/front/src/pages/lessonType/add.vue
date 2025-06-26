@@ -8,9 +8,9 @@
       :rules="rules"
       label-width="180px"
     >
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程类型" prop="kechengleixing">
-            <el-input v-model="ruleForm.kechengleixing" 
-                placeholder="课程类型" clearable :disabled=" false  ||ro.kechengleixing"></el-input>
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程类型" prop="lessonType">
+            <el-input v-model="ruleForm.lessonType" 
+                placeholder="课程类型" clearable :disabled=" false  ||ro.lessonType"></el-input>
           </el-form-item>
 
       <el-form-item :style='{"padding":"0","margin":"0"}'>
@@ -29,17 +29,17 @@
         id: '',
         baseUrl: '',
         ro:{
-				kechengleixing : false,
+				lessonType : false,
         },
         type: '',
         userTableName: localStorage.getItem('UserTableName'),
         ruleForm: {
-          kechengleixing: '',
+          lessonType: '',
         },
 
 
         rules: {
-          kechengleixing: [
+          lessonType: [
           ],
         },
 		centerType: false,
@@ -75,9 +75,9 @@
         if(type=='cross'){
           var obj = JSON.parse(localStorage.getItem('crossObj'));
           for (var o in obj){
-            if(o=='kechengleixing'){
-              this.ruleForm.kechengleixing = obj[o];
-              this.ro.kechengleixing = true;
+            if(o=='lessonType'){
+              this.ruleForm.lessonType = obj[o];
+              this.ro.lessonType = true;
               continue;
             }
           }
@@ -102,7 +102,7 @@
     // 多级联动参数
       // 多级联动参数
       info() {
-        this.$http.get(`kechengleixing/detail/${this.$route.query.id}`, {emulateJSON: true}).then(res => {
+        this.$http.get(`lessonType/detail/${this.$route.query.id}`, {emulateJSON: true}).then(res => {
           if (res.data.code == 0) {
             this.ruleForm = res.data.data;
           }
@@ -147,7 +147,7 @@
 							crossuserid:crossuserid,
 							crossrefid:crossrefid,
 						}
-						this.$http.get('kechengleixing/list', {
+						this.$http.get('lessonType/list', {
 							params: params
 						}).then(res => {
 							if(res.data.data.total>=crossoptnum) {
@@ -161,7 +161,7 @@
 								// 跨表计算
 
 
-								this.$http.post(`kechengleixing/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
+								this.$http.post(`lessonType/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
 									if (res.data.code == 0) {
 										this.$message({
 											message: '操作成功',
@@ -184,7 +184,7 @@
 					} else {
 
 
-						this.$http.post(`kechengleixing/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
+						this.$http.post(`lessonType/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
 							if (res.data.code == 0) {
 								this.$message({
 									message: '操作成功',

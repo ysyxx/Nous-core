@@ -12,10 +12,10 @@
             <el-input v-model="ruleForm.kechengmingcheng" 
                 placeholder="课程名称" clearable :disabled=" false  ||ro.kechengmingcheng"></el-input>
           </el-form-item>
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}'  label="课程类型" prop="kechengleixing">
-            <el-select v-model="ruleForm.kechengleixing" placeholder="请选择课程类型" :disabled=" false  ||ro.kechengleixing" >
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}'  label="课程类型" prop="lessonType">
+            <el-select v-model="ruleForm.lessonType" placeholder="请选择课程类型" :disabled=" false  ||ro.lessonType" >
               <el-option
-                  v-for="(item,index) in kechengleixingOptions"
+                  v-for="(item,index) in lessonTypeOptions"
                   :key="index"
                   :label="item"
                   :value="item">
@@ -85,7 +85,7 @@
         baseUrl: '',
         ro:{
 				kechengmingcheng : false,
-				kechengleixing : false,
+				lessonType : false,
 				kechengkeshi : false,
 				kechengpingfen : false,
 				kechengshipin : false,
@@ -101,7 +101,7 @@
         userTableName: localStorage.getItem('UserTableName'),
         ruleForm: {
           kechengmingcheng: '',
-          kechengleixing: '',
+          lessonType: '',
           kechengkeshi: '',
           kechengpingfen: '',
           kechengshipin: '',
@@ -113,13 +113,13 @@
           clicknum: '',
           storeupnum: '',
         },
-        kechengleixingOptions: [],
+        lessonTypeOptions: [],
 
 
         rules: {
           kechengmingcheng: [
           ],
-          kechengleixing: [
+          lessonType: [
           ],
           kechengkeshi: [
           ],
@@ -185,9 +185,9 @@
               this.ro.kechengmingcheng = true;
               continue;
             }
-            if(o=='kechengleixing'){
-              this.ruleForm.kechengleixing = obj[o];
-              this.ro.kechengleixing = true;
+            if(o=='lessonType'){
+              this.ruleForm.lessonType = obj[o];
+              this.ro.lessonType = true;
               continue;
             }
             if(o=='kechengkeshi'){
@@ -250,9 +250,9 @@
             var json = res.data.data;
           }
         });
-        this.$http.get('option/kechengleixing/kechengleixing', {emulateJSON: true}).then(res => {
+        this.$http.get('option/lesson_type/lesson_type', {emulateJSON: true}).then(res => {
           if (res.data.code == 0) {
-            this.kechengleixingOptions = res.data.data;
+            this.lessonTypeOptions = res.data.data;
           }
         });
 
@@ -267,7 +267,7 @@
     // 多级联动参数
       // 多级联动参数
       info() {
-        this.$http.get(`kechengxinxi/detail/${this.$route.query.id}`, {emulateJSON: true}).then(res => {
+        this.$http.get(`course/detail/${this.$route.query.id}`, {emulateJSON: true}).then(res => {
           if (res.data.code == 0) {
             this.ruleForm = res.data.data;
           }
@@ -312,7 +312,7 @@
 							crossuserid:crossuserid,
 							crossrefid:crossrefid,
 						}
-						this.$http.get('kechengxinxi/list', {
+						this.$http.get('course/list', {
 							params: params
 						}).then(res => {
 							if(res.data.data.total>=crossoptnum) {
@@ -326,7 +326,7 @@
 								// 跨表计算
 
 
-								this.$http.post(`kechengxinxi/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
+								this.$http.post(`course/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
 									if (res.data.code == 0) {
 										this.$message({
 											message: '操作成功',
@@ -349,7 +349,7 @@
 					} else {
 
 
-						this.$http.post(`kechengxinxi/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
+						this.$http.post(`course/${this.ruleForm.id?'update':this.centerType?'save':'add'}`, this.ruleForm).then(res => {
 							if (res.data.code == 0) {
 								this.$message({
 									message: '操作成功',

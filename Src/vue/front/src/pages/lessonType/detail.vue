@@ -3,7 +3,7 @@
 	<div :style='{"padding":"20px 7%","margin":"0px auto","borderColor":"#ddd","borderRadius":"0px","background":"none","borderWidth":"0 0 1px","width":"100%","borderStyle":"solid"}' class="breadcrumb-preview">
 		<el-breadcrumb :separator="'Ξ'" :style='{"fontSize":"14px","lineHeight":"1"}'>
 			<el-breadcrumb-item class="item1" to="/"><a>首页</a></el-breadcrumb-item>
-			<el-breadcrumb-item class="item2" v-for="(item, index) in breadcrumbItem" :key="index" to="/index/kechengleixing"><a>{{item.name}}</a></el-breadcrumb-item>
+			<el-breadcrumb-item class="item2" v-for="(item, index) in breadcrumbItem" :key="index" to="/index/lessonType"><a>{{item.name}}</a></el-breadcrumb-item>
 			<el-breadcrumb-item class="item3"><a href="javascript:void(0);">详情</a></el-breadcrumb-item>
 		</el-breadcrumb>
 	</div>
@@ -20,11 +20,11 @@
 				</div>
 				<div class="item" :style='{"padding":"0 10px","margin":"0 0 0px 0","borderColor":"#ddd","background":"none","borderWidth":"0 0 1px","display":"flex","borderStyle":"dashed","justifyContent":"spaceBetween"}'>
 					<div class="lable" :style='{"padding":"0 10px","color":"#999","textAlign":"right","width":"auto","fontSize":"14px","lineHeight":"40px","height":"40px"}'>课程类型</div>
-					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#666","flex":"1","height":"auto"}'>{{detail.kechengleixing}}</div>
+					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#666","flex":"1","height":"auto"}'>{{detail.lessonType}}</div>
 				</div>
 				<div class="btn" :style='{"padding":"10px 0","flexWrap":"wrap","display":"flex"}'>
-					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 5px 0 0","outline":"none","color":"#333","borderRadius":"4px","background":"#009cf550","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px"}' v-if="btnAuth('kechengleixing','修改')" @click="editClick">修改</el-button>
-					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 5px 0 0","outline":"none","color":"#333","borderRadius":"4px","background":"#f5340050","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px"}' v-if="btnAuth('kechengleixing','删除')" @click="delClick">删除</el-button>
+					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 5px 0 0","outline":"none","color":"#333","borderRadius":"4px","background":"#009cf550","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px"}' v-if="btnAuth('lessonType','修改')" @click="editClick">修改</el-button>
+					<el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 5px 0 0","outline":"none","color":"#333","borderRadius":"4px","background":"#f5340050","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px"}' v-if="btnAuth('lessonType','删除')" @click="delClick">删除</el-button>
 					<!-- hasChat 无 -->
 				</div>
 			</div>
@@ -92,7 +92,7 @@
     //数据集合
     data() {
       return {
-        tablename: 'kechengleixing',
+        tablename: 'lessonType',
         baseUrl: '',
         breadcrumbItem: [
           {
@@ -235,13 +235,13 @@
 		},
 		// 修改
 		editClick(){
-			this.$router.push(`/index/kechengleixingAdd?type=edit&&id=${this.detail.id}`);
+			this.$router.push(`/index/lessonTypeAdd?type=edit&&id=${this.detail.id}`);
 		},
 		// 删除
 		delClick(){
 			this.$confirm('是否删除此课程类型？')
 			  .then(_ => {
-			    this.$http.post('kechengleixing/delete', [this.detail.id]).then(res => {
+			    this.$http.post('lessonType/delete', [this.detail.id]).then(res => {
 			      if (res.data.code == 0) {
 			        this.$message({
 			          type: 'success',

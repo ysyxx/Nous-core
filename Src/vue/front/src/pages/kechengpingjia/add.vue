@@ -12,9 +12,9 @@
             <el-input v-model="ruleForm.kechengmingcheng" 
                 placeholder="课程名称" clearable :disabled=" false  ||ro.kechengmingcheng"></el-input>
           </el-form-item>
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程类型" prop="kechengleixing">
-            <el-input v-model="ruleForm.kechengleixing" 
-                placeholder="课程类型" clearable :disabled=" false  ||ro.kechengleixing"></el-input>
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程类型" prop="lessonType">
+            <el-input v-model="ruleForm.lessonType" 
+                placeholder="课程类型" clearable :disabled=" false  ||ro.lessonType"></el-input>
           </el-form-item>
           <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}' label="课程图片" v-if="type!='cross' || (type=='cross' && !ro.kechengtupian)" prop="kechengtupian">
             <file-upload
@@ -114,7 +114,7 @@
         baseUrl: '',
         ro:{
 				kechengmingcheng : false,
-				kechengleixing : false,
+				lessonType : false,
 				kechengtupian : false,
 				jiaoxuemubiao : false,
 				jiaoxuefangfa : false,
@@ -131,7 +131,7 @@
         userTableName: localStorage.getItem('UserTableName'),
         ruleForm: {
           kechengmingcheng: '',
-          kechengleixing: '',
+          lessonType: '',
           kechengtupian: '',
           jiaoxuemubiao: '',
           jiaoxuefangfa: '',
@@ -151,7 +151,7 @@
         rules: {
           kechengmingcheng: [
           ],
-          kechengleixing: [
+          lessonType: [
           ],
           kechengtupian: [
           ],
@@ -215,9 +215,9 @@
               this.ro.kechengmingcheng = true;
               continue;
             }
-            if(o=='kechengleixing'){
-              this.ruleForm.kechengleixing = obj[o];
-              this.ro.kechengleixing = true;
+            if(o=='lessonType'){
+              this.ruleForm.lessonType = obj[o];
+              this.ro.lessonType = true;
               continue;
             }
             if(o=='kechengtupian'){

@@ -15,18 +15,18 @@
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程名称" prop="kechengmingcheng">
 					<el-input v-model="ruleForm.kechengmingcheng" placeholder="课程名称" readonly></el-input>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="select" v-if="type!='info'"  label="课程类型" prop="kechengleixing">
-					<el-select :disabled="ro.kechengleixing" v-model="ruleForm.kechengleixing" placeholder="请选择课程类型" >
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="select" v-if="type!='info'"  label="课程类型" prop="lessonType">
+					<el-select :disabled="ro.lessonType" v-model="ruleForm.lessonType" placeholder="请选择课程类型" >
 						<el-option
-							v-for="(item,index) in kechengleixingOptions"
+							v-for="(item,index) in lessonTypeOptions"
 							v-bind:key="index"
 							:label="item"
 							:value="item">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="kechengleixing">
-					<el-input v-model="ruleForm.kechengleixing"
+				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' v-else class="input" label="课程类型" prop="lessonType">
+					<el-input v-model="ruleForm.lessonType"
 						placeholder="课程类型" readonly></el-input>
 				</el-form-item>
 				<el-form-item :style='{"width":"48%","margin":"0 0 30px 0","fontSize":"inherit","color":"inherit"}' class="input" v-if="type!='info'"  label="课程课时" prop="kechengkeshi">
@@ -179,7 +179,7 @@ export default {
 			
 			ro:{
 				kechengmingcheng : false,
-				kechengleixing : false,
+				lessonType : false,
 				kechengkeshi : false,
 				kechengpingfen : false,
 				kechengshipin : false,
@@ -195,7 +195,7 @@ export default {
 			
 			ruleForm: {
 				kechengmingcheng: '',
-				kechengleixing: '',
+				lessonType: '',
 				kechengkeshi: '',
 				kechengpingfen: '',
 				kechengshipin: '',
@@ -204,13 +204,13 @@ export default {
 				clicktime: '',
 			},
 		
-			kechengleixingOptions: [],
+			lessonTypeOptions: [],
 
 			
 			rules: {
 				kechengmingcheng: [
 				],
-				kechengleixing: [
+				lessonType: [
 				],
 				kechengkeshi: [
 				],
@@ -275,9 +275,9 @@ export default {
 							this.ro.kechengmingcheng = true;
 							continue;
 						}
-						if(o=='kechengleixing'){
-							this.ruleForm.kechengleixing = obj[o];
-							this.ro.kechengleixing = true;
+						if(o=='lessonType'){
+							this.ruleForm.lessonType = obj[o];
+							this.ro.lessonType = true;
 							continue;
 						}
 						if(o=='kechengkeshi'){
@@ -360,11 +360,11 @@ export default {
 			});
 			
             this.$http({
-				url: `option/kechengleixing/kechengleixing`,
+				url: `option/lessonType/lessonType`,
 				method: "get"
             }).then(({ data }) => {
 				if (data && data.code === 0) {
-					this.kechengleixingOptions = data.data;
+					this.lessonTypeOptions = data.data;
 				} else {
 					this.$message.error(data.msg);
 				}
@@ -375,7 +375,7 @@ export default {
 
     info(id) {
       this.$http({
-        url: `kechengxinxi/info/${id}`,
+        url: `course/info/${id}`,
         method: "get"
       }).then(({ data }) => {
         if (data && data.code === 0) {
@@ -453,7 +453,7 @@ var objcross = this.$storage.getObj('crossObj');
 						crossrefid:this.ruleForm.crossrefid,
 					} 
 				this.$http({ 
-					url: "kechengxinxi/page", 
+					url: "course/page", 
 					method: "get", 
 					params: params 
 				}).then(({ 
@@ -465,7 +465,7 @@ var objcross = this.$storage.getObj('crossObj');
 							return false;
 						} else {
 							this.$http({
-								url: `kechengxinxi/${!this.ruleForm.id ? "save" : "update"}`,
+								url: `course/${!this.ruleForm.id ? "save" : "update"}`,
 								method: "post",
 								data: this.ruleForm
 							}).then(({ data }) => {
@@ -477,7 +477,7 @@ var objcross = this.$storage.getObj('crossObj');
 										onClose: () => {
 											this.parent.showFlag = true;
 											this.parent.addOrUpdateFlag = false;
-											this.parent.kechengxinxiCrossAddOrUpdateFlag = false;
+											this.parent.courseCrossAddOrUpdateFlag = false;
 											this.parent.search();
 											this.parent.contentStyleChange();
 										}
@@ -493,7 +493,7 @@ var objcross = this.$storage.getObj('crossObj');
 			});
 		} else {
 			this.$http({
-				url: `kechengxinxi/${!this.ruleForm.id ? "save" : "update"}`,
+				url: `course/${!this.ruleForm.id ? "save" : "update"}`,
 				method: "post",
 			   data: this.ruleForm
 			}).then(({ data }) => {
@@ -505,7 +505,7 @@ var objcross = this.$storage.getObj('crossObj');
 						onClose: () => {
 							this.parent.showFlag = true;
 							this.parent.addOrUpdateFlag = false;
-							this.parent.kechengxinxiCrossAddOrUpdateFlag = false;
+							this.parent.courseCrossAddOrUpdateFlag = false;
 							this.parent.search();
 							this.parent.contentStyleChange();
 						}
@@ -526,7 +526,7 @@ var objcross = this.$storage.getObj('crossObj');
     back() {
       this.parent.showFlag = true;
       this.parent.addOrUpdateFlag = false;
-      this.parent.kechengxinxiCrossAddOrUpdateFlag = false;
+      this.parent.courseCrossAddOrUpdateFlag = false;
       this.parent.contentStyleChange();
     },
     kechengshipinUploadChange(fileUrls) {

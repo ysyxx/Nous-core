@@ -21,7 +21,7 @@
 				</div>
 				<div class="item" :style='{"padding":"0 10px","margin":"0 0 0px 0","borderColor":"#ddd","background":"none","borderWidth":"0 0 1px","display":"flex","borderStyle":"dashed","justifyContent":"spaceBetween"}'>
 					<div class="lable" :style='{"padding":"0 10px","color":"#999","textAlign":"right","width":"auto","fontSize":"14px","lineHeight":"40px","height":"40px"}'>课程类型</div>
-					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#666","flex":"1","height":"auto"}'>{{detail.kechengleixing}}</div>
+					<div  :style='{"padding":"8px 10px 0","fontSize":"14px","lineHeight":"24px","color":"#666","flex":"1","height":"auto"}'>{{detail.lessonType}}</div>
 				</div>
 				<div class="item" :style='{"padding":"0 10px","margin":"0 0 0px 0","borderColor":"#ddd","background":"none","borderWidth":"0 0 1px","display":"flex","borderStyle":"dashed","justifyContent":"spaceBetween"}'>
 					<div class="lable" :style='{"padding":"0 10px","color":"#999","textAlign":"right","width":"auto","fontSize":"14px","lineHeight":"40px","height":"40px"}'>教学目标</div>
