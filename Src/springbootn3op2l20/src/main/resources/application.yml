@@ -1,0 +1,60 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+    port: 8080
+    servlet:
+        context-path: /springbootn3op2l20
+
+
+spring:
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/springbootn3op2l20?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+
+#        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#        url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=springbootn3op2l20
+#        username: sa
+#        password: 123456
+
+    servlet:
+      multipart:
+        max-file-size: 300MB
+        max-request-size: 300MB
+    resources:
+      static-locations: classpath:static/,file:static/
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+
+  typeAliasesPackage: com.entity
+  global-config:
+
+    id-type: 1
+
+    field-strategy: 1
+
+    db-column-underline: true
+
+    refresh-mapper: true
+
+    logic-delete-value: -1
+    logic-not-delete-value: 0
+
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+
+    jdbc-type-for-null: 'null'
+
+
+obs:
+  access-key: HPUADKRWEJHRYLVFXMXD
+  secret-key: NK1IsE9AVhLa6SXm17Us19bR2XGZmGmiOPMqfv5H
+  endpoint: obs.cn-north-4.myhuaweicloud.com
+  bucket-name: smart-core
