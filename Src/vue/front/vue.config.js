@@ -32,16 +32,21 @@ lintOnSave: false,
         port: 8082, //指定端口
         hot: true, // 开启热更新
         https: false, // 是否开启https模式
-        proxy: { // 请求代理服务器
-            '/springbootn3op2l20': { //带上api前缀的
-                target: 'http://localhost:8080/springbootn3op2l20/', //代理目标地址
-                changeOrigin: true,
-                secure: false,
-                pathRewrite: { // 在发出请求后将/api替换为''空值，这样不影响接口请求
-                    '^/springbootn3op2l20': ''
-                }
-            }
-        }
+        // proxy: {
+        // // 后端服务，通过网关访问
+        // '/springbootn3op2l20': {
+        //     target: 'http://localhost:9000', // 代理到网关服务
+        //     changeOrigin: true,
+        //     secure: false,
+        //     },
+
+        // // AI 服务，通过网关访问
+        // '/api/ai': {
+        //     target: 'http://localhost:9000', // 同样代理到网关服务
+        //     changeOrigin: true,
+        //     secure: false,
+        //     }
+        // },
     },
 chainWebpack(config) {
     config.module

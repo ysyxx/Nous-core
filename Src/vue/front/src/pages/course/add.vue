@@ -12,10 +12,10 @@
             <el-input v-model="ruleForm.kechengmingcheng" 
                 placeholder="课程名称" clearable :disabled=" false  ||ro.kechengmingcheng"></el-input>
           </el-form-item>
-          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}'  label="课程类型" prop="lessonType">
-            <el-select v-model="ruleForm.lessonType" placeholder="请选择课程类型" :disabled=" false  ||ro.lessonType" >
+          <el-form-item :style='{"padding":"10px","margin":"0 0 10px","background":"none"}'  label="课程类型" prop="courseType">
+            <el-select v-model="ruleForm.courseType" placeholder="请选择课程类型" :disabled=" false  ||ro.courseType" >
               <el-option
-                  v-for="(item,index) in lessonTypeOptions"
+                  v-for="(item,index) in courseTypeOptions"
                   :key="index"
                   :label="item"
                   :value="item">
@@ -85,7 +85,7 @@
         baseUrl: '',
         ro:{
 				kechengmingcheng : false,
-				lessonType : false,
+				courseType : false,
 				kechengkeshi : false,
 				kechengpingfen : false,
 				kechengshipin : false,
@@ -101,7 +101,7 @@
         userTableName: localStorage.getItem('UserTableName'),
         ruleForm: {
           kechengmingcheng: '',
-          lessonType: '',
+          courseType: '',
           kechengkeshi: '',
           kechengpingfen: '',
           kechengshipin: '',
@@ -113,13 +113,13 @@
           clicknum: '',
           storeupnum: '',
         },
-        lessonTypeOptions: [],
+        courseTypeOptions: [],
 
 
         rules: {
           kechengmingcheng: [
           ],
-          lessonType: [
+          courseType: [
           ],
           kechengkeshi: [
           ],
@@ -185,9 +185,9 @@
               this.ro.kechengmingcheng = true;
               continue;
             }
-            if(o=='lessonType'){
-              this.ruleForm.lessonType = obj[o];
-              this.ro.lessonType = true;
+            if(o=='courseType'){
+              this.ruleForm.courseType = obj[o];
+              this.ro.courseType = true;
               continue;
             }
             if(o=='kechengkeshi'){
@@ -250,9 +250,9 @@
             var json = res.data.data;
           }
         });
-        this.$http.get('option/lesson_type/lesson_type', {emulateJSON: true}).then(res => {
+        this.$http.get('option/course_type/course_type', {emulateJSON: true}).then(res => {
           if (res.data.code == 0) {
-            this.lessonTypeOptions = res.data.data;
+            this.courseTypeOptions = res.data.data;
           }
         });
 

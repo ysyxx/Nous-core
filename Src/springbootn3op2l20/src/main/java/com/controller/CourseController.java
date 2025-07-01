@@ -3,45 +3,33 @@ package com.controller;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
-import com.utils.ValidatorUtils;
+import com.alibaba.fastjson.JSON;
+import com.attribute.CourseTypeEnum;
+import com.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.annotation.IgnoreAuth;
 import com.annotation.SysLog;
-import com.utils.UserBasedCollaborativeFiltering;
 
 import com.entity.CourseEntity; // 修改: KechengxinxiEntity -> CourseEntity
 import com.entity.view.CourseView; // 修改: KechengxinxiView -> CourseView
 
 import com.service.CourseService; // 修改: KechengxinxiService -> CourseService
 import com.service.TokenService;
-import com.utils.PageUtils;
-import com.utils.R;
-import com.utils.MPUtil;
-import com.utils.MapUtils;
-import com.utils.CommonUtil;
+
 import java.io.IOException;
 import com.service.StoreupService;
 import com.entity.StoreupEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 课程信息
@@ -59,29 +47,38 @@ public class CourseController { // 修改: KechengxinxiController -> CourseContr
     @Autowired
     private StoreupService storeupService;
 
+    @Autowired
+    private OBSUtil obsUtil;
     /**
      * 后端列表
      */
     @RequestMapping("/page")
-    public R page(@RequestParam Map<String, Object> params, CourseEntity course, // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course
+    public R page(@RequestParam Map<String, Object> params, CourseEntity course,
                   HttpServletRequest request){
-        EntityWrapper<CourseEntity> ew = new EntityWrapper<CourseEntity>(); // 修改: KechengxinxiEntity -> CourseEntity
-
-        PageUtils page = courseService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params)); // 修改: kechengxinxi -> course
-
+        EntityWrapper<CourseEntity> ew = new EntityWrapper<CourseEntity>();
+        PageUtils page = courseService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params));
         return R.ok().put("data", page);
     }
 
     /**
      * 前端列表
      */
-    @IgnoreAuth
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params, CourseEntity course, // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course
+    public R list(@RequestParam Map<String, Object> params, CourseEntity course,
                   HttpServletRequest request){
-        EntityWrapper<CourseEntity> ew = new EntityWrapper<CourseEntity>(); // 修改: KechengxinxiEntity -> CourseEntity
 
-        PageUtils page = courseService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params)); // 修改: kechengxinxi -> course
+        if (course.getCrazilyNum() != null && course.getCrazilyNum() == 0) {
+            course.setCrazilyNum(null); // 将0值设为null，让MPUtil忽略
+        }
+        if (course.getThumbsUpNum() != null && course.getThumbsUpNum() == 0) {
+            course.setThumbsUpNum(null);
+        }
+        if (course.getClickNum() != null && course.getClickNum() == 0) {
+            course.setClickNum(null);
+        }
+        EntityWrapper<CourseEntity> ew = new EntityWrapper<CourseEntity>(); //
+        PageUtils page = courseService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params));
+
         return R.ok().put("data", page);
     }
 
@@ -131,53 +128,91 @@ public class CourseController { // 修改: KechengxinxiController -> CourseContr
         return R.ok().put("data", course);
     }
 
-    /**
-     * 赞或踩
-     */
-    @RequestMapping("/thumbsup/{id}")
-    public R vote(@PathVariable("id") String id,String type){
-        CourseEntity course = courseService.selectById(id); // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course, kechengxinxiService -> courseService
-        if(type.equals("1")) {
-            course.setThumbsUpNum(course.getThumbsUpNum()+1); // 修改: kechengxinxi -> course
-        } else {
-            course.setCrazilyNum(course.getCrazilyNum()+1); // 修改: kechengxinxi -> course
-        }
-        courseService.updateById(course); // 修改: kechengxinxiService -> courseService, kechengxinxi -> course
-        return R.ok("投票成功");
-    }
 
     /**
      * 后端保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @SysLog("新增课程信息")
-    public R save(@RequestBody CourseEntity course, HttpServletRequest request){ // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course
-        //ValidatorUtils.validateEntity(course); // 修改: kechengxinxi -> course
-        courseService.insert(course); // 修改: kechengxinxiService -> courseService, kechengxinxi -> course
-        return R.ok();
+    public R save(
+            @RequestParam("courseData") String courseJsonString, // 接收 JSON 字符串
+            @RequestParam("file") MultipartFile file, // 接收上传的文件
+            HttpServletRequest request
+    ) {
+        CourseEntity course;
+        try {
+            course = JSON.parseObject(courseJsonString, CourseEntity.class); // 使用 Fastjson
+        } catch (Exception e) {
+            return R.error("课程数据解析失败: " + e.getMessage());
+        }
+
+        CourseTypeEnum typeEnum = CourseTypeEnum.fromCode(course.getKechengleixing());
+        if (typeEnum != null) {
+            course.setKechengleixing(typeEnum.getDescription());
+        }
+        else{
+            return R.error("不存在的课程类型编码: " + course.getKechengleixing());
+        }
+
+        course.setCrazilyNum(0);
+        course.setClickNum(0);
+        course.setThumbsUpNum(0);
+        course.setAddtime(new Date()); // 如果是 java.util.Date
+        course.setKechengpingfen(0);
+        try {
+            if (file.isEmpty()) {
+                return R.error("上传文件不能为空");
+            }
+
+            String fileName = "courses/covers/" + UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+            String imageUrl = obsUtil.uploadFile(fileName, file.getInputStream());
+            course.setCoverImageUrl(imageUrl);
+
+        } catch (IOException e) {
+            return R.error("图片文件上传失败: " + e.getMessage());
+        }
+
+        courseService.insert(course);
+        return R.ok("创建新课程成功");
     }
 
-    /**
-     * 前端保存
-     */
-    @SysLog("新增课程信息")
-    @RequestMapping("/add")
-    public R add(@RequestBody CourseEntity course, HttpServletRequest request){ // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course
-        //ValidatorUtils.validateEntity(course); // 修改: kechengxinxi -> course
-        courseService.insert(course); // 修改: kechengxinxiService -> courseService, kechengxinxi -> course
-        return R.ok();
-    }
 
     /**
      * 修改
      */
-    @RequestMapping("/update")
-    @Transactional
+    @PostMapping("/update")
     @SysLog("修改课程信息")
-    public R update(@RequestBody CourseEntity course, HttpServletRequest request){ // 修改: KechengxinxiEntity kechengxinxi -> CourseEntity course
-        //ValidatorUtils.validateEntity(course); // 修改: kechengxinxi -> course
-        courseService.updateById(course);//全部更新 // 修改: kechengxinxiService -> courseService, kechengxinxi -> course
-        return R.ok();
+    public R update(
+            @RequestParam("courseData") String courseJsonString, // 接收 JSON 字符串
+            @RequestParam("file") MultipartFile file, // 接收上传的文件
+            HttpServletRequest request
+    ) {
+        CourseEntity course;
+        try {
+            course = JSON.parseObject(courseJsonString, CourseEntity.class); // 使用 Fastjson
+        } catch (Exception e) {
+            return R.error("课程数据解析失败: " + e.getMessage());
+        }
+
+        course.setCrazilyNum(0);
+        course.setClickNum(0);
+        course.setThumbsUpNum(0);
+        course.setAddtime(new Date()); // 如果是 java.util.Date
+
+        try {
+            if (file.isEmpty()) {
+                return R.error("上传文件不能为空");
+            }
+
+            String fileName = "courses/covers/" + UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+            String imageUrl = obsUtil.uploadFile(fileName, file.getInputStream());
+            course.setCoverImageUrl(imageUrl);
+
+        } catch (IOException e) {
+            return R.error("图片文件上传失败: " + e.getMessage());
+        }
+        courseService.updateById(course);
+        return R.ok("修改课程成功");
     }
 
     /**
@@ -186,8 +221,8 @@ public class CourseController { // 修改: KechengxinxiController -> CourseContr
     @RequestMapping("/delete")
     @SysLog("删除课程信息")
     public R delete(@RequestBody Long[] ids){
-        courseService.deleteBatchIds(Arrays.asList(ids)); // 修改: kechengxinxiService -> courseService
-        return R.ok();
+        courseService.deleteBatchIds(Arrays.asList(ids));
+        return R.ok("删除成功");
     }
 
     /**
@@ -212,10 +247,20 @@ public class CourseController { // 修改: KechengxinxiController -> CourseContr
                 newMap.put(pre + "." + newKey, entry.getValue());
             }
         }
-        params.put("sort", "clicknum");
+        params.put("sort", "click_num");
         params.put("order", "desc");
         PageUtils page = courseService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params)); // 修改: kechengxinxiService -> courseService, kechengxinxi -> course
         return R.ok().put("data", page);
+    }
+
+    /**
+     * 总数
+     */
+    @RequestMapping("/count")
+    public R count(@RequestParam Map<String, Object> params,CourseEntity course, HttpServletRequest request){
+        EntityWrapper<CourseEntity> ew = new EntityWrapper<CourseEntity>();
+        int count = courseService.selectCount(MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, course), params), params));
+        return R.ok().put("count", count);
     }
 
     /**
@@ -230,17 +275,17 @@ public class CourseController { // 修改: KechengxinxiController -> CourseContr
         if(storeups!=null && storeups.size()>0) {
             for(StoreupEntity storeup : storeups) {
                 Map<String, Double> userRatings = null;
-                if(ratings.containsKey(storeup.getUserid().toString())) {
-                    userRatings = ratings.get(storeup.getUserid().toString());
+                if(ratings.containsKey(storeup.getUserId().toString())) {
+                    userRatings = ratings.get(storeup.getUserId().toString());
                 } else {
                     userRatings = new HashMap<>();
-                    ratings.put(storeup.getUserid().toString(), userRatings);
+                    ratings.put(storeup.getUserId().toString(), userRatings);
                 }
 
-                if(userRatings.containsKey(storeup.getRefid().toString())) {
-                    userRatings.put(storeup.getRefid().toString(), userRatings.get(storeup.getRefid().toString())+1.0);
+                if(userRatings.containsKey(storeup.getCourseId().toString())) {
+                    userRatings.put(storeup.getCourseId().toString(), userRatings.get(storeup.getCourseId().toString())+1.0);
                 } else {
-                    userRatings.put(storeup.getRefid().toString(), 1.0);
+                    userRatings.put(storeup.getCourseId().toString(), 1.0);
                 }
             }
         }

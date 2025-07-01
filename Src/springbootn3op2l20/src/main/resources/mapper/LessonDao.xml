@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.LessonDao">
+
+    <resultMap type="com.entity.LessonEntity" id="lessonResultMap">
+        <result property="id" column="id"/>
+        <result property="chapterOrder" column="chapter_order"/>
+        <result property="title" column="title"/>
+        <result property="lessonOrder" column="lesson_order"/>
+        <result property="courseId" column="course_id"/>
+        <result property="lessonType" column="lesson_type"/>
+        <result property="videoUrl" column="video_url"/>
+        <result property="durationSeconds" column="duration_seconds"/>
+        <result property="contentForAi" column="content_for_ai"/>
+        <result property="pdfUrl" column="pdf_url"/>
+    </resultMap>
+
+    <select id="selectByChapterIdAndOrder" resultMap="lessonResultMap">
+        SELECT * FROM lessons
+        WHERE chapter_order = #{chapterId} AND lesson_order = #{lessonOrder}
+    </select>
+
+    <select id="selectListVO"
+            resultType="com.entity.vo.LessonVO" >
+        SELECT * FROM lessons
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectVO"
+            resultType="com.entity.vo.LessonVO" >
+        SELECT  t.* FROM lessons t
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectListView"
+            resultType="com.entity.view.LessonView" >
+
+        SELECT  t.* FROM lessons t
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectView"
+            resultType="com.entity.view.LessonView" >
+        SELECT * FROM lessons
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+</mapper>

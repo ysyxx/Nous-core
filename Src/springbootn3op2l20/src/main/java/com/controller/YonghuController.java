@@ -117,6 +117,8 @@ public class YonghuController {
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params,YonghuEntity yonghu,
 		HttpServletRequest request){
+        System.out.println(params);
+        System.out.println(yonghu);
         EntityWrapper<YonghuEntity> ew = new EntityWrapper<YonghuEntity>();
 
 		PageUtils page = yonghuService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yonghu), params), params));
@@ -319,7 +321,15 @@ public class YonghuController {
     }
 
 
-
+    /**
+     * 总数
+     */
+    @RequestMapping("/count")
+    public R count(@RequestParam Map<String, Object> params,YonghuEntity yonghu, HttpServletRequest request){
+        EntityWrapper<YonghuEntity> ew = new EntityWrapper<YonghuEntity>();
+        int count = yonghuService.selectCount(MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, yonghu), params), params));
+        return R.ok().put("count", count);
+    }
 
 
 }

@@ -30,9 +30,9 @@
             c.title AS course_title,
             c.description AS course_description,
             c.cover_image_url AS course_cover_image_url,
-            c.clicknum,
-            c.thumbsupnum,
-            c.crazilynum,
+            c.click_num,
+            c.thumbs_up_num,
+            c.crazily_num,
             ch.id AS chapter_id,
             ch.title AS chapter_title,
             ch.chapter_order,
@@ -75,6 +75,11 @@
     <select id="selectView" resultType="com.entity.view.CourseView">
         SELECT * FROM courses course
         <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectByCourseIdXml" resultType="com.entity.CourseEntity">
+        SELECT * FROM courses
+        WHERE id = #{courseId}
     </select>
 
 </mapper>

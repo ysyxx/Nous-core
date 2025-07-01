@@ -4,6 +4,7 @@ package com.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import com.entity.CourseEntity;
+import com.entity.LearningProgressEntity;
 import com.entity.view.CourseView;
 import com.entity.vo.CourseVO;
 import com.utils.PageUtils;
@@ -27,4 +28,6 @@ public interface CourseService extends IService<CourseEntity> {
     CourseView selectView(@Param("ew") Wrapper<CourseEntity> wrapper);
 
     PageUtils queryPage(Map<String, Object> params,Wrapper<CourseEntity> wrapper);
+
+    CourseEntity selectByCourseId(Long courseId);
 }

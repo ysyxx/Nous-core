@@ -205,7 +205,7 @@ import AddOrUpdate from "./add-or-update";
             params['username'] = '%' + this.searchForm.username + '%'
           }
 			let user = JSON.parse(this.$storage.getObj('userForm'))
-			console.log(user)
+
 			this.$http({
 				url: "users/page",
 				method: "get",

@@ -1,37 +1,46 @@
 <template>
-<div>
-	<div class="container" :style='{"minHeight":"100vh","alignItems":"center","background":"url(http://codegen.caihongy.cn/20230918/e4c3de45e8454be08468ba32acc9108f.jpg)","display":"flex","width":"100%","backgroundSize":"cover","backgroundPosition":"center center","backgroundRepeat":"no-repeat","justifyContent":"center"}'>
-		<el-form ref="loginForm" :model="loginForm" :style='{"width":"30vw","padding":"0px","margin":"0 0 0 50vw","borderRadius":"0px","background":"#fff","height":"auto"}' :rules="rules">
-			<div v-if="false" :style='{"width":"100%","margin":"0 0 10px 0","lineHeight":"44px","fontSize":"20px","color":"rgba(64, 158, 255, 1)","textAlign":"center"}'>USER / LOGIN</div>
-			<div v-if="true" :style='{"width":"80%","margin":"0 auto 10px","lineHeight":"44px","fontSize":"28px","color":"#333","textAlign":"left"}'>启熹LearnLume登录</div>
-			<el-form-item v-if="loginType==1" class="list-item" :style='{"width":"80%","margin":"0 auto 10px"}' prop="username">
-				<div v-if="true" :style='{"width":"100%","lineHeight":"36px","fontSize":"14px","color":"#333"}'>账号：</div>
-				<input :style='{"border":"1px solid #ddd","padding":"0 10px","color":"#666","borderRadius":"4px","width":"100%","fontSize":"14px","height":"40px"}' v-model="loginForm.username" placeholder="请输入账户">
-			</el-form-item>
-			<el-form-item v-if="loginType==1" class="list-item" :style='{"width":"80%","margin":"0 auto 10px"}' prop="password">
-				<div v-if="true" :style='{"width":"100%","lineHeight":"36px","fontSize":"14px","color":"#333"}'>密码：</div>
-				<input :style='{"border":"1px solid #ddd","padding":"0 10px","color":"#666","borderRadius":"4px","width":"100%","fontSize":"14px","height":"40px"}' v-model="loginForm.password" placeholder="请输入密码" type="password">
-			</el-form-item>
+<div class="login-page">
+    <div class="login-bg"></div>
+  <el-form ref="loginForm" :model="loginForm" class="login-form" :rules="rules">
+      <div v-if="false" class="hidden-title">USER / LOGIN</div>
+      <div v-if="true" class="main-title">智核NousCore登录</div>
+      
+      <el-form-item v-if="loginType==1" class="form-item" prop="username">
+        <div class="input-label">账号：</div>
+        <input class="input-field" v-model="loginForm.username" placeholder="请输入账户">
+      </el-form-item>
+      
+      <el-form-item v-if="loginType==1" class="form-item" prop="password">
+        <div class="input-label">密码：</div>
+        <input class="input-field" v-model="loginForm.password" placeholder="请输入密码" type="password">
+      </el-form-item>
 
-			<el-form-item class="list-type select" :style='{"width":"80%","margin":"0 auto 10px"}' v-if="roles.length>1">
-			  <el-select v-model="loginForm.tableName" placeholder="请选择角色" @change="selectChange">
-				<el-option v-for="item,index in roles" :key="index" :label="item.roleName" :value="item.tableName" />
-			  </el-select>
-			</el-form-item>
+      <el-form-item class="role-selector" v-if="roles.length>1">
+        <el-select v-model="loginForm.tableName" placeholder="请选择角色" @change="selectChange">
+          <el-option v-for="(item,index) in roles" :key="index" :label="item.roleName" :value="item.tableName" />
+        </el-select>
+      </el-form-item>
 
-			
-			<el-form-item class="list-btn" :style='{"width":"80%","margin":"20px auto"}'>
-				<el-button v-if="loginType==1" :style='{"border":"0","cursor":"pointer","padding":"0 24px","margin":"0 5px","outline":"none","color":"#fff","borderRadius":"4px","background":"#ffc000","width":"100%","fontSize":"16px","height":"44px"}' @click="submitForm('loginForm')">登录</el-button>
-				<el-button v-if="loginType==1" :style='{"border":"0","cursor":"pointer","padding":"0 24px","margin":"0 5px","outline":"none","color":"#666","borderRadius":"4px","textAlign":"right","background":"none","width":"100%","fontSize":"14px","height":"44px"}' @click="resetForm('loginForm')">重置</el-button>
-			</el-form-item>
-			<div :style='{"width":"80%","margin":"20px auto"}'>
-			<router-link :style='{"cursor":"pointer","margin":"0 5px","fontSize":"14px","textDecoration":"none","color":"#F5BB00","background":"#fff"}' :to="{path: '/register', query: {role: item.tableName,pageFlag:'register'}}" v-if="item.hasFrontRegister=='是'" v-for="(item, index) in roles" :key="index">注册{{item.roleName.replace('注册','')}}</router-link>
-			</div>
-			<div class="idea1" :style='{"width":"100%","background":"red","display":"none","height":"40px"}'></div>
-			<div class="idea2" :style='{"width":"100%","background":"blue","display":"none","height":"40px"}'></div>
-		</el-form>
-    </div>
-</div>
+      <el-form-item class="button-group">
+        <el-button v-if="loginType==1" class="login-btn" @click="submitForm('loginForm')">登录</el-button>
+        <el-button v-if="loginType==1" class="reset-btn" @click="resetForm('loginForm')">重置</el-button>
+      </el-form-item>
+      
+      <div class="register-links">
+        <router-link class="register-link" 
+          :to="{path: '/register', query: {role: item.tableName,pageFlag:'register'}}" 
+          v-if="item.hasFrontRegister=='是'" 
+          v-for="(item, index) in roles" 
+          :key="index">
+          注册{{item.roleName.replace('注册','')}}
+        </router-link>
+      </div>
+      
+      <div class="idea1"></div>
+      <div class="idea2"></div>
+    </el-form>
+  </div>
+
 </template>
 
 <script>
@@ -185,9 +194,150 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.login-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: url(https://nous-core.obs.cn-north-4.myhuaweicloud.com/images/W%60%40P4H_AU%7DJD%60G0W9DE9CYQ.png我先不要这个图);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.login-form {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30vw;
+  padding: 20px;
+  border-radius: 0px;
+  background: #fff;
+  height: auto;
+  z-index: 2;
+  margin-right:10%; /* 可根据需要调整右侧间距 */
+}
+
+.hidden-title {
+  width: 100%;
+  margin: 0 0 10px 0;
+  line-height: 44px;
+  font-size: 20px;
+  color: rgba(64, 158, 255, 1);
+  text-align: center;
+  display: none;
+}
+
+.main-title {
+  width: 80%;
+  margin: 0 auto 10px;
+  line-height: 44px;
+  font-size: 28px;
+  color: #333;
+  text-align: left;
+}
+
+.form-item {
+  width: 80%;
+  margin: 0 auto 10px;
+}
+
+.input-label {
+  width: 100%;
+  line-height: 36px;
+  font-size: 14px;
+  color: #333;
+}
+
+.input-field {
+  border: 1px solid #ddd;
+  padding: 0 10px;
+  color: #666;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+  height: 40px;
+}
+
+.role-selector {
+  width: 80%;
+  margin: 0 auto 10px;
+}
+
+.button-group {
+  width: 80%;
+  margin: 20px auto;
+}
+
+.login-btn {
+  border: 0;
+  cursor: pointer;
+  padding: 0 24px;
+  margin: 0 5px;
+  outline: none;
+  color: #fff;
+  border-radius: 4px;
+  background: #ffc000;
+  width: 100%;
+  font-size: 16px;
+  height: 44px;
+}
+
+.reset-btn {
+  border: 0;
+  cursor: pointer;
+  padding: 0 24px;
+  margin: 0 5px;
+  outline: none;
+  color: #666;
+  border-radius: 4px;
+  text-align: right;
+  background: none;
+  width: 100%;
+  font-size: 14px;
+  height: 44px;
+}
+
+.register-links {
+  width: 80%;
+  margin: 20px auto;
+}
+
+.register-link {
+  cursor: pointer;
+  margin: 0 5px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #F5BB00;
+  background: #fff;
+}
+
+.idea1, .idea2 {
+  width: 100%;
+  height: 40px;
+  display: none;
+}
+
+.idea1 {
+  background: red;
+}
+
+.idea2 {
+  background: blue;
+}
 	.container {
 		position: relative;
-		background: url(http://codegen.caihongy.cn/20230918/e4c3de45e8454be08468ba32acc9108f.jpg);
+		background: url(https://nous-core.obs.cn-north-4.myhuaweicloud.com/images/W%60%40P4H_AU%7DJD%60G0W9DE9CYQ.png我先不要这个图);
 		
 		.el-form-item {
 		  & /deep/ .el-form-item__content {

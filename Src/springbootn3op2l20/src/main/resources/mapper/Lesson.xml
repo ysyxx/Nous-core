@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.LessonDao">
+
+    <resultMap type="com.entity.LessonEntity" id="lessonMap">
+        <id property="id" column="id"/>
+        <result property="chapterOrder" column="chapter_order"/>
+        <result property="title" column="title"/>
+        <result property="lessonOrder" column="lesson_order"/>
+        <result property="lessonType" column="lesson_type"/>
+        <result property="videoUrl" column="video_url"/>
+        <result property="durationSeconds" column="duration_seconds"/>
+        <result property="contentForAi" column="content_for_ai"/>
+    </resultMap>
+
+    <select id="selectByChapterIdAndOrder" resultMap="lessonMap">
+        SELECT * FROM lessons
+        WHERE chapter_order = #{chapterId} AND lesson_order = #{lessonOrder}
+    </select>
+
+</mapper>

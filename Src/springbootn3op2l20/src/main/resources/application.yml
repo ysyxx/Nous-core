@@ -10,9 +10,9 @@ server:
 spring:
     datasource:
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/springbootn3op2l20?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://47.121.191.169:3306/springbootn3op2l20?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
         username: root
-        password: 123456
+        password: 20030303yzh
 
 #        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
 #        url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=springbootn3op2l20
@@ -57,4 +57,4 @@ obs:
   access-key: HPUADKRWEJHRYLVFXMXD
   secret-key: NK1IsE9AVhLa6SXm17Us19bR2XGZmGmiOPMqfv5H
   endpoint: obs.cn-north-4.myhuaweicloud.com
-  bucket-name: smart-core
+  bucket-name: nous-core

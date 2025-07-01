@@ -17,28 +17,31 @@
 
 	<select id="selectListVO"
 		resultType="com.entity.vo.StoreupVO" >
-		SELECT * FROM storeup  storeup         
+		SELECT * FROM storeup  storeup
         <where> 1=1 ${ew.sqlSegment}</where>
 	</select>
-	
+
 	<select id="selectVO"
 		resultType="com.entity.vo.StoreupVO" >
-		SELECT  storeup.* FROM storeup  storeup 	
+		SELECT  storeup.* FROM storeup  storeup
  		<where> 1=1 ${ew.sqlSegment}</where>
 	</select>
 
     <select id="selectListView"
 		resultType="com.entity.view.StoreupView" >
 
-		SELECT  storeup.* FROM storeup  storeup 	        
+		SELECT  storeup.* FROM storeup  storeup
         <where> 1=1 ${ew.sqlSegment}</where>
 	</select>
-	
+
 	<select id="selectView"
 		resultType="com.entity.view.StoreupView" >
 		SELECT * FROM storeup  storeup <where> 1=1 ${ew.sqlSegment}</where>
 	</select>
-	
 
+	<select id="getStoreupByUserIdAndCourseIdXml" resultType="com.entity.StoreupEntity"> SELECT *
+																								   FROM storeup
+																								   WHERE user_id = #{userId} AND course_id = #{courseId}
+	</select>
 
 </mapper>

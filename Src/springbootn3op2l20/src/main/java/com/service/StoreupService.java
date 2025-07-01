@@ -14,25 +14,24 @@ import com.entity.view.StoreupView;
 /**
  * 收藏表
  *
- * @author 
- * @email 
+ * @author
+ * @email
  * @date 2024-03-05 18:16:19
  */
 public interface StoreupService extends IService<StoreupEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-    
+
    	List<StoreupVO> selectListVO(Wrapper<StoreupEntity> wrapper);
-   	
+
    	StoreupVO selectVO(@Param("ew") Wrapper<StoreupEntity> wrapper);
-   	
+
    	List<StoreupView> selectListView(Wrapper<StoreupEntity> wrapper);
-   	
+
    	StoreupView selectView(@Param("ew") Wrapper<StoreupEntity> wrapper);
-   	
+
    	PageUtils queryPage(Map<String, Object> params,Wrapper<StoreupEntity> wrapper);
 
-   	
-
+	StoreupEntity getStoreupByUserIdAndCourseId(Long userId, Long courseId);
 }
 

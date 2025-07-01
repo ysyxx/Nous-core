@@ -1,0 +1,46 @@
+flowchart LR
+    subgraph boundary["Nour-core在线课程推荐系统"]
+        direction TB
+
+        subgraph UserCases["用户用例"]
+            RegLogin("用户注册与登录")
+            BrowseCourses("浏览与查询课程")
+            InteractWithCourse("课程学习与互动 (评价、进度)")
+            Community("参与互动交流")
+            Feedback("提交意见反馈")
+            Personal("管理个人中心")
+            AIQA["AI辅助答疑"]
+        end
+
+        subgraph AdminCases["管理员用例"]
+            UserManagement("用户管理")
+            CourseManagement("课程信息与类型管理")
+            ContentManagement("内容管理 (评价、反馈、交流)")
+            AISvc["AI服务管理"]
+        end
+    end
+
+    %% -- Actor to Use Case Connections --
+    User(["用户"]) --> RegLogin
+    User --> BrowseCourses
+    User --> InteractWithCourse
+    User --> Community
+    User --> Feedback
+    User --> Personal
+    User --> AIQA
+
+    Admin(["管理员"]) --> UserManagement
+    Admin --> CourseManagement
+    Admin --> ContentManagement
+    Admin --> AISvc
+    Admin --> AIQA
+
+    %% -- Include Relationships --
+    InteractWithCourse -.->|≪include≫| RegLogin
+    Community -.->|≪include≫| RegLogin
+    Personal -.->|≪include≫| RegLogin
+    AIQA -.->|≪include≫| RegLogin
+
+    %% -- Highlighting New Features --
+    classDef highlight fill:#e6e6fa,stroke:#333,stroke-width:2px
+    class AIQA,AISvc highlight

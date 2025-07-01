@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LearningProgressDao">
+
+    <resultMap type="com.entity.LearningProgressEntity" id="learningProgressMap">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="lessonId" column="lesson_id"/>
+        <result property="progressSeconds" column="progress_seconds"/>
+        <result property="completed" column="completed"/>
+        <result property="lastPosition" column="last_position"/>
+        <result property="progressPercent" column="progress_percent"/>
+        <result property="lessonOrder" column="lesson_order"/>
+        <result property="chapterOrder" column="chapter_order"/>
+    </resultMap>
+
+
+    <select id="getProgressByUserIdAndLessonIdXml" resultType="com.entity.LearningProgressEntity">
+        SELECT *
+        FROM learning_progress
+        WHERE user_id = #{userId} AND lesson_id = #{lessonId}
+    </select>
+
+    <select id="selectProgressWithLessonInfoByUserId" resultMap="learningProgressMap">
+        SELECT
+            lp.*,
+            l.lesson_order,
+            l.chapter_order
+        FROM
+            learning_progress lp
+                JOIN
+            lessons l ON lp.lesson_id = l.id
+        WHERE
+            lp.user_id = #{userId}
+        ORDER BY
+            l.chapter_order ASC, l.lesson_order ASC
+    </select>
+
+    <select id="selectProgressWithLessonInfoByCourseIdAndUserId" resultMap="learningProgressMap">
+        SELECT
+            lp.*,
+            l.lesson_order,
+            l.chapter_order
+        FROM
+            learning_progress lp
+                JOIN
+            lessons l ON lp.lesson_id = l.id
+        WHERE
+            l.course_id = #{courseId}
+          AND lp.user_id = #{userId}  ORDER BY
+                                          l.chapter_order ASC, l.lesson_order ASC
+    </select>
+</mapper>

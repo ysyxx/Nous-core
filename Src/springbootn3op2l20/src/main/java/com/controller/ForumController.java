@@ -159,6 +159,19 @@ public class ForumController {
     }
 
 
+    /**
+     * 总数
+     */
+    @RequestMapping("/count")
+    public R count(@RequestParam Map<String, Object> params,ForumEntity forum, HttpServletRequest request){
+        if(!request.getSession().getAttribute("role").toString().equals("管理员")) {
+            forum.setUserid((Long)request.getSession().getAttribute("userId"));
+        }
+        EntityWrapper<ForumEntity> ew = new EntityWrapper<ForumEntity>();
+        int count = forumService.selectCount(MPUtil.sort(MPUtil.between(MPUtil.likeOrEq(ew, forum), params), params));
+        return R.ok().put("count", count);
+    }
+
 
     /**
      * 后端保存

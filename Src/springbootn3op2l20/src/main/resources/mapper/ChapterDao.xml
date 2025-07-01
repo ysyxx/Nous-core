@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.ChapterDao">
+
+    <resultMap type="com.entity.ChapterEntity" id="chapterMap">
+        <result property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="title" column="title"/>
+        <result property="chapterOrder" column="chapter_order"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="selectListVO"
+            resultType="com.entity.vo.ChapterVO" >
+        SELECT * FROM chapters
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectVO"
+            resultType="com.entity.vo.ChapterVO" >
+        SELECT  t.* FROM chapters t
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectListView"
+            resultType="com.entity.view.ChapterView" >
+
+        SELECT  t.* FROM chapters t
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+    <select id="selectView"
+            resultType="com.entity.view.ChapterView" >
+        SELECT * FROM chapters
+        <where> 1=1 ${ew.sqlSegment}</where>
+    </select>
+
+</mapper>

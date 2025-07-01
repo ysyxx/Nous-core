@@ -3,14 +3,27 @@
 package com.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.entity.LearningProgressEntity;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 学习进度表数据访问接口
  * @author
  * @date 2025-06-25
  */
+@Mapper // 或者你项目使用的其他Mapper注解，如 @Repository
 public interface LearningProgressDao extends BaseMapper<LearningProgressEntity> {
-    // 继承 BaseMapper 后，自动拥有了对 LearningProgressEntity 的所有基础CRUD方法。
-    // 暂时不需要添加自定义方法。
+
+    LearningProgressEntity getProgressByUserIdAndLessonIdXml(@Param("userId") Long userId, @Param("lessonId") Long lessonId);
+
+    List<LearningProgressEntity> selectProgressWithLessonInfoByUserId(@Param("userId") Long userId);
+
+    List<LearningProgressEntity> selectProgressWithLessonInfoByCourseIdAndUserId(
+            @Param("courseId") Long courseId,
+            @Param("userId") Long userId
+    );
 }

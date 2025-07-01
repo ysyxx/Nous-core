@@ -1,49 +1,70 @@
 <template>
-<div :style='{"width":"100%","padding":"30px 7% 40px","margin":"0px auto","position":"relative","background":"#fff"}'>
-    <el-button :style='{"border":"0","cursor":"pointer","padding":"0 10px","margin":"0 5px 0 0","outline":"none","color":"#333","borderRadius":"4px","background":"#F5BB0050","width":"auto","lineHeight":"40px","fontSize":"14px","height":"40px"}' type="warning" size="mini" @click="backClick" class="el-icon-back">返回</el-button>
-	<div class="section-title" :style='{"margin":"10px 0","color":"#fff","textAlign":"center","background":"#333","width":"100%","fontSize":"20px","lineHeight":"54px"}'>我的发布</div>
+  <div class="my-posts-container">
+    <!-- 返回按钮 -->
+    <el-button class="back-button" type="warning" size="mini" @click="backClick">
+      <i class="el-icon-back"></i>返回
+    </el-button>
+    
+    <!-- 标题区域 -->
+    <div class="section-title">我的发布</div>
+    
+    <!-- 表格区域 -->
     <el-table
+      class="posts-table"
       :data="tableData"
       style="width: 100%">
+      
       <el-table-column
         label="标题"
-        prop="title">
+        prop="title"
+        min-width="200">
       </el-table-column>
+      
       <el-table-column
         label="发布时间"
-        prop="addtime">
+        prop="addtime"
+        width="180">
       </el-table-column>
-      <el-table-column label="操作" width="150">
+      
+      <el-table-column 
+        label="操作" 
+        width="150"
+        align="center">
         <template slot-scope="scope">
           <el-button
+            class="edit-btn"
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+            @click="handleEdit(scope.$index, scope.row)">
+            修改
+          </el-button>
           <el-button
+            class="delete-btn"
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-	
+    
+    <!-- 分页组件 -->
     <el-pagination
+      class="pagination"
       background
-      id="pagination" class="pagination"
       :pager-count="7"
       :page-size="pageSize"
       :page-sizes="pageSizes"
-	  prev-text="<"
+      prev-text="<"
       next-text=">"
       :hide-on-single-page="false"
-      :layout='["total","prev","pager","next","sizes","jumper"].join()'
+      :layout="['total','prev','pager','next','sizes','jumper'].join()"
       :total="total"
-      :style='{"padding":"0 7%","margin":"10px auto","whiteSpace":"nowrap","overflow":"hidden","color":"#333","textAlign":"center","width":"100%","clear":"both","fontWeight":"500","order":"50"}'
       @current-change="curChange"
       @prev-click="prevClick"
-      @next-click="nextClick"
-    ></el-pagination>
-	
-</div>
+      @next-click="nextClick">
+    </el-pagination>
+  </div>
 </template>
 
 <script>
@@ -113,6 +134,160 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.my-posts-container {
+  width: 100%;
+  padding: 30px 7% 40px;
+  margin: 0 auto;
+  position: relative;
+  background: #fff;
+}
+
+/* 返回按钮 */
+.back-button {
+  border: 0;
+  cursor: pointer;
+  padding: 0 10px;
+  margin: 0 5px 0 0;
+  outline: none;
+  color: #333;
+  border-radius: 4px;
+  background: #F5BB0050;
+  width: auto;
+  line-height: 40px;
+  font-size: 14px;
+  height: 40px;
+  transition: all 0.3s;
+  
+  &:hover {
+    background: #F5BB0070;
+  }
+  
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* 标题区域 */
+.section-title {
+  margin: 10px 0;
+  color: #fff;
+  text-align: center;
+  background: #333;
+  width: 100%;
+  font-size: 20px;
+  line-height: 54px;
+}
+
+/* 表格区域 */
+.posts-table {
+  margin: 20px 0;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  overflow: hidden;
+  
+  /* 表头样式 */
+  /deep/ .el-table__header-wrapper {
+    th {
+      background-color: #f5f7fa;
+      color: #333;
+      font-weight: bold;
+    }
+  }
+  
+  /* 表格行样式 */
+  /deep/ .el-table__body-wrapper {
+    tr:hover {
+      td {
+        background-color: #f5f7fa !important;
+      }
+    }
+  }
+}
+
+/* 操作按钮 */
+.edit-btn {
+  background-color: #409EFF;
+  border-color: #409EFF;
+  color: #fff;
+  
+  &:hover {
+    background-color: #66b1ff;
+    border-color: #66b1ff;
+  }
+}
+
+.delete-btn {
+  background-color: #F56C6C;
+  border-color: #F56C6C;
+  color: #fff;
+  
+  &:hover {
+    background-color: #f78989;
+    border-color: #f78989;
+  }
+}
+
+/* 分页组件 */
+.pagination {
+  padding: 0 7%;
+  margin: 10px auto;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #333;
+  text-align: center;
+  width: 100%;
+  clear: both;
+  font-weight: 500;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .my-posts-container {
+    padding: 15px 5%;
+  }
+  
+  .posts-table {
+    /deep/ .el-table__header-wrapper {
+      display: none;
+    }
+    
+    /deep/ .el-table__body {
+      tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ebeef5;
+        border-radius: 4px;
+        
+        td {
+          display: block;
+          text-align: right;
+          padding: 10px 15px;
+          border: none;
+          
+          &::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    
+    /deep/ .el-table__row {
+      td:last-child {
+        text-align: center;
+        
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+  
+  .pagination {
+    padding: 0 5%;
+  }
+}
   .section {
     width: 900px;
     margin: 0 auto;

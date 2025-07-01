@@ -22,11 +22,14 @@ public class CourseEntity implements Serializable {
     private String description; // 课程介绍
     private String coverImageUrl; // 封面图片
     private String kechengleixing; // 课程类型 (保留旧字段或改造为type_id)
-    private Date addtime;
+    private Integer kechengpingfen;
 
-    private int clickNum;
-    private int thumbsUpNum;
-    private int crazilyNum;
+    private Date addtime;
+    private Date clickTime;
+    private Integer clickNum;
+    private Integer thumbsUpNum;
+    private Integer crazilyNum;
+    private Integer storeupNum;
     // 这个字段不存在于数据库表中，但用于在查询后存放关联的章节列表
     @TableField(exist = false)
     private List<ChapterEntity> chapters;

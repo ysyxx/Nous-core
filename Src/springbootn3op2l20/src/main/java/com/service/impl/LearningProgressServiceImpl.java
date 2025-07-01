@@ -3,21 +3,27 @@
 package com.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.dao.LearningProgressDao;
 import com.entity.LearningProgressEntity;
 import com.entity.LessonEntity;
 import com.service.LearningProgressService;
 import com.service.LessonService; // 需要注入LessonService来获取课时总时长
+import com.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service("learningProgressService")
 public class LearningProgressServiceImpl extends ServiceImpl<LearningProgressDao, LearningProgressEntity> implements LearningProgressService {
 
     @Autowired
     private LessonService lessonService; // 注入LessonService
+
+    @Autowired
+    private LearningProgressDao learningProgressDao;
 
     @Override
     public boolean updateOrSaveUserProgress(LearningProgressEntity progressEntity) {
@@ -51,13 +57,13 @@ public class LearningProgressServiceImpl extends ServiceImpl<LearningProgressDao
                 existingProgress.setProgressSeconds(progressEntity.getProgressSeconds());
             }
             // 如果之前未完成，现在完成了，则更新完成状态
-            if (!existingProgress.getIsCompleted() && isCompleted) {
-                existingProgress.setIsCompleted(true);
+            if (!existingProgress.getCompleted() && isCompleted) {
+                existingProgress.setCompleted(true);
             }
             return this.updateById(existingProgress);
         } else {
             // 如果记录不存在，则创建新记录
-            progressEntity.setIsCompleted(isCompleted);
+            progressEntity.setCompleted(isCompleted);
             return this.insert(progressEntity);
         }
     }
@@ -67,5 +73,40 @@ public class LearningProgressServiceImpl extends ServiceImpl<LearningProgressDao
         EntityWrapper<LearningProgressEntity> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
         return this.selectList(wrapper);
+    }
+
+    @Override
+    public LearningProgressEntity getProgressByUserIdAndLessonId(Long userId, Long lessonId) {
+        if (userId == null || lessonId == null) {
+            return null;
+        }
+        LearningProgressEntity learningProgressEntity=learningProgressDao.getProgressByUserIdAndLessonIdXml(userId, lessonId);
+        return learningProgressEntity;
+    }
+
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        Page<LearningProgressEntity> page = new Page<>(
+                Integer.parseInt(params.get("page").toString()),
+                Integer.parseInt(params.get("limit").toString())
+        );
+
+        page = this.selectPage(
+                page,
+                new EntityWrapper<LearningProgressEntity>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public List<LearningProgressEntity> getProgressWithLessonInfoByUserId(Long userId) {
+        return this.baseMapper.selectProgressWithLessonInfoByUserId(userId);
+    }
+
+    @Override
+    public List<LearningProgressEntity> getProgressWithLessonInfoByCourseIdAndUserId(Long courseId, Long userId) {
+        return this.baseMapper.selectProgressWithLessonInfoByCourseIdAndUserId(courseId, userId);
     }
 }

@@ -1,5 +1,8 @@
 package com.service.impl;
 
+import com.dao.LearningProgressDao;
+import com.entity.LearningProgressEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.List;
@@ -20,8 +23,9 @@ import com.entity.view.StoreupView;
 
 @Service("storeupService")
 public class StoreupServiceImpl extends ServiceImpl<StoreupDao, StoreupEntity> implements StoreupService {
-	
-	
+
+	@Autowired
+	private StoreupDao storeupDao;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<StoreupEntity> page = this.selectPage(
@@ -30,7 +34,7 @@ public class StoreupServiceImpl extends ServiceImpl<StoreupDao, StoreupEntity> i
         );
         return new PageUtils(page);
     }
-    
+
     @Override
 	public PageUtils queryPage(Map<String, Object> params, Wrapper<StoreupEntity> wrapper) {
 		  Page<StoreupView> page =new Query<StoreupView>(params).getPage();
@@ -39,17 +43,17 @@ public class StoreupServiceImpl extends ServiceImpl<StoreupDao, StoreupEntity> i
 	    	return pageUtil;
  	}
 
-    
+
     @Override
 	public List<StoreupVO> selectListVO(Wrapper<StoreupEntity> wrapper) {
  		return baseMapper.selectListVO(wrapper);
 	}
-	
+
 	@Override
 	public StoreupVO selectVO(Wrapper<StoreupEntity> wrapper) {
  		return baseMapper.selectVO(wrapper);
 	}
-	
+
 	@Override
 	public List<StoreupView> selectListView(Wrapper<StoreupEntity> wrapper) {
 		return baseMapper.selectListView(wrapper);
@@ -60,5 +64,13 @@ public class StoreupServiceImpl extends ServiceImpl<StoreupDao, StoreupEntity> i
 		return baseMapper.selectView(wrapper);
 	}
 
+	@Override
+	public StoreupEntity getStoreupByUserIdAndCourseId(Long userId, Long courseId) {
+		if (userId == null || courseId == null) {
+			return null;
+		}
+		StoreupEntity storeupEntity=storeupDao.getStoreupByUserIdAndCourseIdXml(userId, courseId);
+		return storeupEntity;
+	}
 
 }

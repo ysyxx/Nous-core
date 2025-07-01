@@ -9,7 +9,7 @@ const base = {
     },
     getProjectName(){
         return {
-            projectName: "启熹LearnLume"
+            projectName: "智核NousCore"
         } 
     }
 }

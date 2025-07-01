@@ -72,7 +72,6 @@ public class FileController{
 				upload.mkdirs(); // 创建upload目录
 			}
 			this.uploadFolder = upload.getAbsolutePath();
-			System.out.println("文件上传目录初始化为: " + this.uploadFolder); // 打印路径方便调试
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			// Fallback to a default or throw an error if path cannot be resolved

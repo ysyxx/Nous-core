@@ -1,5 +1,5 @@
 export default {
-    baseUrl: 'http://localhost:8080/springbootn3op2l20/',
+    baseUrl: 'http://localhost:9000/springbootn3op2l20/',
 	name: '/springbootn3op2l20',
     indexNav: [
         {

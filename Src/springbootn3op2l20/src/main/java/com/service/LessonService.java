@@ -3,7 +3,17 @@
 package com.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.dto.ChapterWithLessonsDTO;
+import com.utils.PageUtils;
 import com.entity.LessonEntity;
+
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.entity.vo.LessonVO;
+import com.entity.view.LessonView;
 
 /**
  * 课时服务接口
@@ -13,11 +23,17 @@ import com.entity.LessonEntity;
  * @date 2025-06-25
  */
 public interface LessonService extends IService<LessonEntity> {
-    // 继承了 IService<LessonEntity> 之后，
-    // MyBatis-Plus会自动为我们提供所有基础的增删改查方法，
-    // 例如 getById, save, update, remove, page, list 等。
+    PageUtils queryPage(Map<String, Object> params);
 
-    // 如果未来有针对“课时”的特殊业务逻辑，可以在这里添加自定义方法。
-    // 例如：public boolean publishLesson(Long lessonId);
-    // 目前，我们暂时不需要任何自定义方法。
+    List<LessonVO> selectListVO(Wrapper<LessonEntity> wrapper);
+
+    LessonVO selectVO(@Param("ew") Wrapper<LessonEntity> wrapper);
+
+    List<LessonView> selectListView(Wrapper<LessonEntity> wrapper);
+
+    PageUtils queryPage(Map<String, Object> params,Wrapper<LessonEntity> wrapper);
+
+    LessonView selectView(@Param("ew") Wrapper<LessonEntity> wrapper);
+
+    List<ChapterWithLessonsDTO> getCourseStructureByCourseId(Long courseId);
 }

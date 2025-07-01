@@ -15,11 +15,13 @@ public class LessonEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private Long chapterId; // 关联的章节ID
+    private Long chapterOrder;
     private String title; // 课时标题
     private Integer lessonOrder; // 课时顺序
+    private Integer courseId; // 课程ID
     private String lessonType; // 课时类型: 'video', 'article'
     private String videoUrl; // 视频地址
     private Integer durationSeconds; // 时长（秒）
     private String contentForAi; // 用于AI问答的文本内容
+    private String pdfUrl;
 }

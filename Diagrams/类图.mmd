@@ -1,0 +1,99 @@
+classDiagram
+    direction TB
+
+    class 用户 {
+        +long id
+        +String 用户账号
+        +String 密码
+        +login()
+        +register()
+        +ai问答(question)
+    }
+
+    class 管理员 {
+        +String 角色
+        +管理用户(user)
+        +管理课程(course)
+        +监控AI服务()
+    }
+
+    class 课程 {
+        +long id
+        +String 课程名称
+        +String 课程内容
+        +String 课程视频
+        +getDetails()
+    }
+
+    class 课程类型 {
+        +long id
+        +String 课程类型
+    }
+
+    class 课程评价 {
+        +long id
+        +String 评价建议
+        +Date 评价时间
+        +String 是否审核
+        +createReview()
+    }
+
+    class 学习进度 {
+        +long id
+        +String 学习进度
+        +int 学习时长
+        +updateProgress()
+    }
+
+    class 意见反馈 {
+        +long id
+        +String 内容
+        +String 回复
+        +submit()
+    }
+
+    class 互动交流 {
+        +long id
+        +String 标题
+        +String 内容
+        +long 父节点ID
+        +createPost()
+    }
+
+    class 收藏 {
+        +long id
+        +long 用户ID
+        +long 关联ID
+        +String 关联表名
+    }
+
+    class AI服务 {
+        -String 模型接口地址
+        +getAnswer(context)
+        +pretrainModel(data)
+    }
+
+    class 认证令牌 {
+        +long 用户ID
+        +String 令牌
+        +Timestamp 过期时间
+        +validate()
+    }
+
+    管理员 --|> 用户
+
+    用户 "1" -- "0..*" 课程评价 : 发表
+    用户 "1" -- "0..*" 学习进度 : 产生
+    用户 "1" -- "0..*" 意见反馈 : 提交
+    用户 "1" -- "0..*" 互动交流 : 发布
+    用户 "1" -- "0..*" 收藏 : 拥有
+
+    课程 "1" -- "0..*" 课程评价 : 包含
+    课程 "1" -- "0..*" 学习进度 : 对应
+    课程类型 "1" -- "0..*" 课程 : 分类
+
+    用户 ..> AI服务 : use
+    管理员 ..> AI服务 : manage
+    AI服务 ..> 课程 : depend on
+    用户 ..> 认证令牌 : depend on
+    管理员 ..> 认证令牌 : depend on

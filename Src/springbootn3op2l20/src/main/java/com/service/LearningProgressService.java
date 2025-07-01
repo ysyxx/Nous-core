@@ -4,7 +4,10 @@ package com.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.entity.LearningProgressEntity;
+import com.utils.PageUtils;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * 学习进度服务接口
@@ -20,10 +23,19 @@ public interface LearningProgressService extends IService<LearningProgressEntity
      */
     boolean updateOrSaveUserProgress(LearningProgressEntity progressEntity);
 
+
+    PageUtils queryPage(Map<String, Object> params);
     /**
      * 获取指定用户的所有学习进度记录
      * @param userId 用户ID
      * @return 学习进度列表
      */
     List<LearningProgressEntity> getProgressByUserId(Long userId);
+
+    LearningProgressEntity getProgressByUserIdAndLessonId(Long userId, Long lessonId);
+
+    List<LearningProgressEntity> getProgressWithLessonInfoByUserId(Long userId);
+
+    List<LearningProgressEntity> getProgressWithLessonInfoByCourseIdAndUserId(Long courseId, Long userId);
+
 }

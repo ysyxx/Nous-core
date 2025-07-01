@@ -20,9 +20,9 @@ import yonghuAdd from '../pages/yonghu/add'
 import courseList from '../pages/course/list'
 import courseDetail from '../pages/course/detail'
 import courseAdd from '../pages/course/add'
-import lessonTypeList from '../pages/lessonType/list'
-import lessonTypeDetail from '../pages/lessonType/detail'
-import lessonTypeAdd from '../pages/lessonType/add'
+import courseTypeList from '../pages/courseType/list'
+import courseTypeDetail from '../pages/courseType/detail'
+import courseTypeAdd from '../pages/courseType/add'
 import kechengpingjiaList from '../pages/kechengpingjia/list'
 import kechengpingjiaDetail from '../pages/kechengpingjia/detail'
 import kechengpingjiaAdd from '../pages/kechengpingjia/add'
@@ -110,16 +110,16 @@ export default new VueRouter({
 					component: courseAdd
 				},
 				{
-					path: 'lessonType',
-					component: lessonTypeList
+					path: 'courseType',
+					component: courseTypeList
 				},
 				{
-					path: 'lessonTypeDetail',
-					component: lessonTypeDetail
+					path: 'courseTypeDetail',
+					component: courseTypeDetail
 				},
 				{
-					path: 'lessonTypeAdd',
-					component: lessonTypeAdd
+					path: 'courseTypeAdd',
+					component: courseTypeAdd
 				},
 				{
 					path: 'kechengpingjia',

@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import com.entity.CourseEntity;
+import com.entity.LearningProgressEntity;
+import com.service.CourseService;
 import com.utils.ValidatorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +46,8 @@ import java.io.IOException;
 /**
  * 收藏表
  * 后端接口
- * @author 
- * @email 
+ * @author
+ * @email
  * @date 2024-03-05 18:16:19
  */
 @RestController
@@ -53,10 +56,11 @@ public class StoreupController {
     @Autowired
     private StoreupService storeupService;
 
+    @Autowired
+    private CourseService courseService;
 
 
 
-    
 
 
 
@@ -67,7 +71,7 @@ public class StoreupController {
     public R page(@RequestParam Map<String, Object> params,StoreupEntity storeup,
 		HttpServletRequest request){
         if(!request.getSession().getAttribute("role").toString().equals("管理员")) {
-            storeup.setUserid((Long)request.getSession().getAttribute("userId"));
+            storeup.setUserId((Long)request.getSession().getAttribute("userId"));
         }
         EntityWrapper<StoreupEntity> ew = new EntityWrapper<StoreupEntity>();
 
@@ -75,13 +79,13 @@ public class StoreupController {
 
         return R.ok().put("data", page);
     }
-    
+
     /**
      * 前端列表
      */
 	@IgnoreAuth
     @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params,StoreupEntity storeup, 
+    public R list(@RequestParam Map<String, Object> params,StoreupEntity storeup,
 		HttpServletRequest request){
         EntityWrapper<StoreupEntity> ew = new EntityWrapper<StoreupEntity>();
 
@@ -97,7 +101,7 @@ public class StoreupController {
     @RequestMapping("/lists")
     public R list( StoreupEntity storeup){
        	EntityWrapper<StoreupEntity> ew = new EntityWrapper<StoreupEntity>();
-      	ew.allEq(MPUtil.allEQMapPre( storeup, "storeup")); 
+      	ew.allEq(MPUtil.allEQMapPre( storeup, "storeup"));
         return R.ok().put("data", storeupService.selectListView(ew));
     }
 
@@ -107,11 +111,11 @@ public class StoreupController {
     @RequestMapping("/query")
     public R query(StoreupEntity storeup){
         EntityWrapper< StoreupEntity> ew = new EntityWrapper< StoreupEntity>();
- 		ew.allEq(MPUtil.allEQMapPre( storeup, "storeup")); 
+ 		ew.allEq(MPUtil.allEQMapPre( storeup, "storeup"));
 		StoreupView storeupView =  storeupService.selectView(ew);
 		return R.ok("查询收藏表成功").put("data", storeupView);
     }
-	
+
     /**
      * 后端详情
      */
@@ -130,7 +134,7 @@ public class StoreupController {
         StoreupEntity storeup = storeupService.selectById(id);
         return R.ok().put("data", storeup);
     }
-    
+
 
 
 
@@ -138,25 +142,91 @@ public class StoreupController {
      * 后端保存
      */
     @RequestMapping("/save")
-    @SysLog("新增收藏表") 
+    @SysLog("新增收藏表")
     public R save(@RequestBody StoreupEntity storeup, HttpServletRequest request){
     	//ValidatorUtils.validateEntity(storeup);
-    	storeup.setUserid((Long)request.getSession().getAttribute("userId"));
-        storeupService.insert(storeup);
-        return R.ok();
-    }
-    
-    /**
-     * 前端保存
-     */
-    @SysLog("新增收藏表")
-    @RequestMapping("/add")
-    public R add(@RequestBody StoreupEntity storeup, HttpServletRequest request){
-    	//ValidatorUtils.validateEntity(storeup);
+    	storeup.setUserId((Long)request.getSession().getAttribute("userId"));
         storeupService.insert(storeup);
         return R.ok();
     }
 
+    /**
+     * 赞或踩
+     */
+    @RequestMapping("/add")
+    public R add(@RequestBody StoreupEntity storeup){
+        StoreupEntity storeupEntity=storeupService.getStoreupByUserIdAndCourseId(storeup.getUserId(),storeup.getCourseId());
+        CourseEntity courseEntity=courseService.selectByCourseId(storeup.getCourseId());
+        if(storeupEntity==null){
+            storeupService.insert(storeup);
+        }
+        else{
+            storeupEntity.setThumbsUp(storeup.getThumbsUp()>0?1:0);
+            storeupEntity.setThumbsDown(storeup.getThumbsDown()>0?1:0);
+            storeupEntity.setFavorite(storeup.getFavorite()>0?1:0);
+            storeupService.updateById(storeupEntity);
+        }
+
+        if(storeup.getFavorite()==2){
+            courseEntity.setStoreupNum(courseEntity.getStoreupNum()+1);
+        }
+
+        if(storeup.getThumbsUp()==2){
+            courseEntity.setThumbsUpNum(courseEntity.getThumbsUpNum()+1);
+        }
+
+        if(storeup.getThumbsDown()==2){
+            courseEntity.setCrazilyNum(courseEntity.getCrazilyNum()+1);
+        }
+
+        courseService.updateById(courseEntity);
+        return R.ok();
+    }
+
+
+    /**
+     * 取消赞或踩
+     */
+    @RequestMapping("/cancel")
+    public R cancel(@RequestBody StoreupEntity storeup){
+        StoreupEntity storeupEntity=storeupService.getStoreupByUserIdAndCourseId(storeup.getUserId(),storeup.getCourseId());
+        CourseEntity courseEntity=courseService.selectByCourseId(storeup.getCourseId());
+
+            storeupEntity.setThumbsUp(storeup.getThumbsUp()>0?1:0);
+            storeupEntity.setThumbsDown(storeup.getThumbsDown()>0?1:0);
+            storeupEntity.setFavorite(storeup.getFavorite()>0?1:0);
+            storeupService.updateById(storeupEntity);
+
+
+
+        if(storeup.getThumbsUp()==-1){
+            courseEntity.setThumbsUpNum(courseEntity.getThumbsUpNum()-1);
+        }
+
+        if(storeup.getThumbsDown()==-1){
+            courseEntity.setCrazilyNum(courseEntity.getCrazilyNum()-1);
+        }
+
+        if(storeup.getFavorite()==-1){
+            courseEntity.setStoreupNum(courseEntity.getStoreupNum()-1);
+        }
+        courseService.updateById(courseEntity);
+        return R.ok();
+    }
+
+    /**
+     * 获取赞、踩、收藏的状态
+     */
+    @RequestMapping("/status")
+    public R statue(@RequestBody StoreupEntity storeup){
+        StoreupEntity storeupEntity=storeupService.getStoreupByUserIdAndCourseId(storeup.getUserId(),storeup.getCourseId());
+        if(storeupEntity==null){
+            storeupEntity=storeup;
+            storeupService.insert(storeup);
+        }
+
+        return R.ok().put("data",storeupEntity);
+    }
 
 
      /**
@@ -184,7 +254,7 @@ public class StoreupController {
 
 
 
-    
+
 
     /**
      * 删除
@@ -195,8 +265,8 @@ public class StoreupController {
         storeupService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
     }
-    
-	
+
+
 	/**
      * 前端智能排序
      */

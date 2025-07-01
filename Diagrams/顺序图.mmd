@@ -1,0 +1,34 @@
+sequenceDiagram
+    actor 用户
+    participant 前端界面 (Vue.js)
+    participant API网关
+    participant 后端服务 (Spring Boot)
+    participant AI服务 (Docker)
+    participant 数据库 (MySQL)
+
+    用户->>前端界面 (Vue.js): 1. 输入问题并点击提交
+    activate 前端界面 (Vue.js)
+
+    前端界面 (Vue.js)->>API网关: 2. 发送提问请求 (带Token和问题)
+    activate API网关
+
+    API网关->>后端服务 (Spring Boot): 3. 验证Token后, 转发请求
+    note right of API网关: 网关核心职责：<br/>身份认证与路由
+    activate 后端服务 (Spring Boot)
+    deactivate API网关
+
+    后端服务 (Spring Boot)->>数据库 (MySQL): 4. 查询相关课程内容作为上下文
+    activate 数据库 (MySQL)
+    数据库 (MySQL)-->>后端服务 (Spring Boot): 5. 返回课程上下文数据
+    deactivate 数据库 (MySQL)
+
+    后端服务 (Spring Boot)->>AI服务 (Docker): 6. 发送问题和上下文数据
+    activate AI服务 (Docker)
+    AI服务 (Docker)-->>后端服务 (Spring Boot): 7. 返回AI生成的答案
+    deactivate AI服务 (Docker)
+
+    后端服务 (Spring Boot)-->>前端界面 (Vue.js): 8. 返回最终答案
+    deactivate 后端服务 (Spring Boot)
+
+    前端界面 (Vue.js)-->>用户: 9. 显示AI回答
+    deactivate 前端界面 (Vue.js)

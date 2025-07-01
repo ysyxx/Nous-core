@@ -1,0 +1,24 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - AddResponseHeader=X-Gateway-Status, Success
+      routes:
+
+        - id: ai-service
+          uri: http://localhost:8001
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - TokenAuth
+
+        # ??2?????????? SpringBoot ????8080?
+        - id: backend-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/springbootn3op2l20/**

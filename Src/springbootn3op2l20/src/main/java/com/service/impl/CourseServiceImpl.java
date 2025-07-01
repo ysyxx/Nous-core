@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 // 导入Spring的Service注解，用于声明这是一个服务类
+import com.entity.LearningProgressEntity;
 import com.entity.view.CourseView;
 import com.entity.vo.CourseVO;
 import com.utils.PageUtils;
@@ -55,7 +56,17 @@ public class CourseServiceImpl extends ServiceImpl<CourseDao, CourseEntity> impl
         Page<CourseView> page =new Query<CourseView>(params).getPage();
         page.setRecords(baseMapper.selectListView(page,wrapper));
         PageUtils pageUtil = new PageUtils(page);
+
         return pageUtil;
+    }
+
+    @Override
+    public CourseEntity selectByCourseId(Long courseId) {
+        if (courseId == null) {
+            return null;
+        }
+        CourseEntity courseEntity=courseDao.selectByCourseIdXml(courseId);
+        return courseEntity;
     }
 
 

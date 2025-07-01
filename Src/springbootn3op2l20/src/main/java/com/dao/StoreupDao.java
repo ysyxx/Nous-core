@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.entity.LearningProgressEntity;
 import com.entity.StoreupEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import java.util.List;
@@ -14,23 +15,23 @@ import com.entity.view.StoreupView;
 
 /**
  * 收藏表
- * 
- * @author 
- * @email 
+ *
+ * @author
+ * @email
  * @date 2024-03-05 18:16:19
  */
 public interface StoreupDao extends BaseMapper<StoreupEntity> {
-	
+
 	List<StoreupVO> selectListVO(@Param("ew") Wrapper<StoreupEntity> wrapper);
-	
+
 	StoreupVO selectVO(@Param("ew") Wrapper<StoreupEntity> wrapper);
-	
+
 	List<StoreupView> selectListView(@Param("ew") Wrapper<StoreupEntity> wrapper);
 
 	List<StoreupView> selectListView(Pagination page,@Param("ew") Wrapper<StoreupEntity> wrapper);
 
-	
-	StoreupView selectView(@Param("ew") Wrapper<StoreupEntity> wrapper);
-	
 
+	StoreupView selectView(@Param("ew") Wrapper<StoreupEntity> wrapper);
+
+	StoreupEntity getStoreupByUserIdAndCourseIdXml(@Param("userId") Long userId, @Param("courseId") Long courseId);
 }
